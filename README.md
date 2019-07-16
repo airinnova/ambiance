@@ -8,7 +8,11 @@ TODO
 
 ### Requirements and installation
 
-TODO
+The recommended way of installation is to use [PyPi](https://pypi.org/project/ambiance/)
+
+```
+pip install ambiance
+```
 
 ### License
 
