@@ -1,1 +1,2 @@
+include README.rst LICENSE.txt
 recursive-exclude test *

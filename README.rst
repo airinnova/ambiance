@@ -1,6 +1,7 @@
-.. figure:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/doc/source/_static/images/logo/logo001.svg?sanitize=true
+.. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/doc/source/_static/images/logo/logo001.svg?sanitize=true
    :alt: Ambiance
-   :width: 50%
+   :width: 100 px
+   :scale: 50 %
 
 .. image:: https://img.shields.io/pypi/v/ambiance.svg?style=flat
    :target: https://pypi.org/project/ambiance/
@@ -8,10 +9,13 @@
 
 *Ambiance* is a full implementation of the ICAO standard atmosphere 1993 written in Python.
 
-Usage
------
+* `International Standard Atmosphere (Wikipedia) <https://en.wikipedia.org/wiki/International_Standard_Atmosphere>`_
+* `Manual Of The ICAO Standard Atmosphere - 3rd Edition 1993 (Doc 7488) <https://store.icao.int/manual-of-the-icao-standard-atmosphere-extended-to-80-kilometres-262-500-feet-doc-7488-quadrilingual-printed.html>`_
 
-Atmospheric properties are computed from an "Atmosphere" object which takes the altitude (geometric height) as input. For instance, to simply retrieve sea level properties, you can write:
+Usage
+=====
+
+Atmospheric properties are computed from an "Atmosphere object" which takes the altitude (geometric height) as input. For instance, to simply retrieve sea level properties, you can write:
 
 .. code:: python
 
@@ -26,7 +30,6 @@ Atmospheric properties are computed from an "Atmosphere" object which takes the 
     >>>
     >>> sealevel.kinematic_viscosity
     array([1.46071857e-05])
-
 
 *Ambiance* also handles list-like input (list, tuples, *Numpy* arrays). The following code demonstrates how to produce a temperature plot with *Matplotlib*. In the example, *Numpy*'s `linspace()` function is used to produce an array with altitudes.
 
@@ -55,7 +58,7 @@ The output is
    :alt: Temperature plot
 
 Installation
-------------
+============
 
 *Ambiance* is available on `PyPi <https://pypi.org/project/ambiance/>`_ and may simply be installed with
 
@@ -64,12 +67,12 @@ Installation
     pip install ambiance
 
 Requirements
-------------
+============
 
-* **Python 3.6** or higher
-* **Numpy**
+* *Python 3.6* or higher
+* *Numpy*
 
 License
--------
+=======
 
 **License:** Apache-2.0

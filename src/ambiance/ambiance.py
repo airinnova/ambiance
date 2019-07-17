@@ -38,10 +38,6 @@ from itertools import tee
 import numpy as np
 
 
-__version__ = '0.0.4'
-__prog_name__ = 'ambiance'
-
-
 def pairwise(iterable):
     """
     Iterate pairwise
