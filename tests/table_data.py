@@ -7,13 +7,13 @@
 
 # ===== LAYER CHANGES =====
 # OK --> -5.0e3
-# OK -2500
-# OK --> 0.00e3
-# OK 2000
-# OK --> 11.0e3
-# OK 15000
-# OK --> 20.0e3
-# OK 25000
+# *OK -2500
+# *OK --> 0.00e3
+# *OK 2000
+# *OK --> 11.0e3
+# *OK 15000
+# *OK --> 20.0e3
+# *OK 25000
 # *OK --> 32.0e3
 # *OK 41_000
 # *OK --> 47.0e3
@@ -116,6 +116,30 @@ table_data.add_entry(
             "mean_particle_speed": 484.15,
             "collision_frequency": 1.1507e10,
             "mean_free_path": 4.2075e-8,
+            }
+        )
+
+table_data.add_entry(
+        h=-4996,
+        entry={
+            "H": -5000,
+            "temperature": 320.650,
+            "temperature_in_celsius": 47.500,
+            "pressure": 1.77687e5,
+            "density": 1.93047,
+            "grav_accel": 9.8221,
+            # ----------
+            "speed_of_sound": 358.972,
+            "dynamic_viscosity": 1.9421e-5,
+            "kinematic_viscosity": 1.0060e-5,
+            "thermal_conductivity": 2.7859e-2,
+            # ----------
+            "pressure_scale_height": 9371.1,
+            "specific_weight": 1.8961e1,
+            "number_density": 4.0140e25,
+            "mean_particle_speed": 484.14,
+            "collision_frequency": 1.1503e10,
+            "mean_free_path": 4.2089e-8,
             }
         )
 
@@ -240,6 +264,30 @@ table_data.add_entry(
         )
 
 table_data.add_entry(
+        h=11_019,
+        entry={
+            "H": 11000,
+            "temperature": 216.650,
+            "temperature_in_celsius": -56.500,
+            "pressure": 2.26320e4,
+            "density": 3.63918e-1,
+            "grav_accel": 9.7727,
+            # ----------
+            "speed_of_sound": 295.069,
+            "dynamic_viscosity": 1.4216e-5,
+            "kinematic_viscosity": 3.9064e-5,
+            "thermal_conductivity": 1.9518e-2,
+            # ----------
+            "pressure_scale_height": 6363.6,
+            "specific_weight": 3.5565,
+            "number_density": 7.5669e24,
+            "mean_particle_speed": 397.95,
+            "collision_frequency": 1.7824e9,
+            "mean_free_path": 2.2327e-7,
+            }
+        )
+
+table_data.add_entry(
         h=15_000,
         entry={
             "H": 14965,
@@ -284,6 +332,30 @@ table_data.add_entry(
             "mean_particle_speed": 397.95,
             "collision_frequency": 4.3546e8,
             "mean_free_path": 9.1387e-7,
+            }
+        )
+
+table_data.add_entry(
+        h=20_063,
+        entry={
+            "H": 20000,
+            "temperature": 216.650,
+            "temperature_in_celsius": -56.500,
+            "pressure": 5.47487e3,
+            "density": 8.80345e-2,
+            "grav_accel": 9.7450,
+            # ----------
+            "speed_of_sound": 295.069,
+            "dynamic_viscosity": 1.4216e-5,
+            "kinematic_viscosity": 1.6148e-4,
+            "thermal_conductivity": 1.9518e-2,
+            # ----------
+            "pressure_scale_height": 6381.7,
+            "specific_weight": 8.5790e-1,
+            "number_density": 1.8305e24,
+            "mean_particle_speed": 397.95,
+            "collision_frequency": 4.3117e8,
+            "mean_free_path": 9.2295e-7,
             }
         )
 
