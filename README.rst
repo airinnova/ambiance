@@ -69,8 +69,16 @@ Installation
 Requirements
 ============
 
+Using *Ambiance* requires
+
 * *Python 3.6* or higher
 * *Numpy*
+
+*For developers*: Recommended packages may be installed with the `requirements.txt`.
+
+.. code::
+
+    pip install -r "requirements.txt"
 
 License
 =======
