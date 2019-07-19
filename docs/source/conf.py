@@ -9,9 +9,10 @@ import os
 import sys
 # import recommonmark.parser
 
-from ambiance.ambiance import __version__, __prog_name__
+from ambiance.__init__ import __module_name__
+from ambiance.__version__ import __version__
 
-name = __prog_name__
+name = __module_name__
 Name = name.capitalize()
 
 sys.path.insert(0, os.path.abspath('../../src/ambiance/'))
@@ -42,15 +43,16 @@ extensions = [
     'sphinx.ext.ifconfig',
     # 'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
+    'recommonmark',
 ]
 
 # Paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
 # Source file parsers
-source_parsers = {
-        '.md': 'recommonmark.parser.CommonMarkParser',
-        }
+# source_parsers = {
+#         '.md': 'recommonmark.parser.CommonMarkParser',
+#         }
 
 # The suffix(es) of source filenames.
 source_suffix = ['.rst', '.md']

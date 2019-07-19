@@ -1,6 +1,6 @@
 # Repo-specific files
 # -------------------
-doc/build
+docs/build
 _TODO
 
 # Python stuff
