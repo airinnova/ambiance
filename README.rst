@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/doc/source/_static/images/logo/logo001.svg?sanitize=true
+.. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/docs/source/_static/images/logo/logo001.svg?sanitize=true
    :alt: Ambiance
    :width: 100 px
    :scale: 50 %
@@ -6,6 +6,14 @@
 .. image:: https://img.shields.io/pypi/v/ambiance.svg?style=flat
    :target: https://pypi.org/project/ambiance/
    :alt: Latest PyPI version
+
+.. image:: https://readthedocs.org/projects/ambiance/badge/?version=latest
+    :target: https://ambiance.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+.. image:: https://img.shields.io/badge/license-Apache%202-blue.svg
+    :target: https://github.com/aarondettmann/ambiance/blob/master/LICENSE.txt
+    :alt: License
 
 *Ambiance* is a full implementation of the ICAO standard atmosphere 1993 written in Python.
 
@@ -54,8 +62,10 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
 
 The output is
 
-.. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/test/temperature_plot.png
+.. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/tests/temperature_plot.png
    :alt: Temperature plot
+
+For all functionality see the `complete documentation <https://ambiance.readthedocs.io/en/latest/>`_.
 
 Installation
 ============
