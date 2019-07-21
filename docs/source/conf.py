@@ -7,7 +7,6 @@
 # -- Path setup --------------------------------------------------------------
 import os
 import sys
-# import recommonmark.parser
 
 from ambiance.__init__ import __module_name__
 from ambiance.__version__ import __version__
@@ -43,7 +42,6 @@ extensions = [
     'sphinx.ext.ifconfig',
     # 'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
-    'recommonmark',
 ]
 
 # Paths that contain templates here, relative to this directory.
