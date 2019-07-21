@@ -1,7 +1,7 @@
 Welcome to |name|'s documentation!
 ==================================
 
-.. image:: _static/images/logo/logo001.svg
+.. image:: _static/images/logo/logo.png
    :width: 200 px
    :alt: Logo
    :align: right

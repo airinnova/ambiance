@@ -1,8 +1,3 @@
-.. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/docs/source/_static/images/logo/logo001.svg?sanitize=true
-   :alt: Ambiance
-   :width: 100 px
-   :scale: 50 %
-
 .. image:: https://img.shields.io/pypi/v/ambiance.svg?style=flat
    :target: https://pypi.org/project/ambiance/
    :alt: Latest PyPI version
@@ -14,6 +9,12 @@
 .. image:: https://img.shields.io/badge/license-Apache%202-blue.svg
     :target: https://github.com/aarondettmann/ambiance/blob/master/LICENSE.txt
     :alt: License
+
+|
+
+.. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/docs/source/_static/images/logo/logo.png
+   :target: https://github.com/aarondettmann/ambiance/
+   :alt: Ambiance
 
 *Ambiance* is a full implementation of the ICAO standard atmosphere 1993 written in Python.
 
