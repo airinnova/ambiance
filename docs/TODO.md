@@ -8,3 +8,7 @@
 * Testing
     * Check invalid inputs --> e.g. [1, [2, 3]]
     * Add test cases for boundaries layers
+
+* Features
+    * Return name of layer
+        * >>> Atmosphere(0).layer_name --> 'Troposphere'

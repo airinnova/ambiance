@@ -216,12 +216,6 @@ class Atmosphere:
 
         return Constant.r*self.H/(Constant.r - self.H)
 
-    @property
-    def grav_accel(self):
-        """Compute gravitational acceleration 'g' for given geometric height 'h'"""
-
-        return Constant.g_0*(Constant.r/(Constant.r + self.h))**2
-
     @staticmethod
     def t2T(t):
         """Convert from temperature 't' in degree Celsius to 'T' in Kelvin"""
@@ -271,6 +265,12 @@ class Atmosphere:
                     break
 
         return (H_b, T_b, beta, p_b)
+
+    @property
+    def grav_accel(self):
+        """Compute gravitational acceleration 'g' for given geometric height 'h'"""
+
+        return Constant.g_0*(Constant.r/(Constant.r + self.h))**2
 
     @property
     def temperature(self):
