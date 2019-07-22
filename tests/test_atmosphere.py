@@ -4,7 +4,7 @@
 # Author: Aaron Dettmann
 
 import pytest
-from pytest import approx
+from pytest import approx, main
 import numpy as np
 
 from ambiance import Atmosphere, Constant
@@ -161,3 +161,7 @@ def test_kelvin_celsius_conversion():
 
     for T in np.arange(0, 1000, 30):
         assert T == approx(Atmosphere.t2T(Atmosphere.T2t(T)))
+
+
+if __name__ == '__main__':
+    main()

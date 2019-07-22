@@ -10,6 +10,14 @@
     :target: https://github.com/aarondettmann/ambiance/blob/master/LICENSE.txt
     :alt: License
 
+.. image:: https://travis-ci.org/aarondettmann/ambiance.svg?branch=master
+    :target: https://travis-ci.org/aarondettmann/ambiance
+    :alt: Build status
+
+.. image:: https://codecov.io/gh/aarondettmann/ambiance/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/aarondettmann/ambiance
+    :alt: Coverage
+
 |
 
 .. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/docs/source/_static/images/logo/logo.png
@@ -30,15 +38,32 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
 
     >>> from ambiance import Atmosphere
     >>> sealevel = Atmosphere(0)
-    >>>
+
     >>> sealevel.temperature
     array([288.15])
-    >>>
+
     >>> sealevel.pressure
     array([101325.])
-    >>>
+
     >>> sealevel.kinematic_viscosity
     array([1.46071857e-05])
+
+The following atmospheric properties are available:
+
+* Collision frequency (`collision_frequency`)
+* Density (`density`)
+* Dynamic viscosity (`dynamic_viscosity`)
+* Gravitational acceleration (`grav_accel`)
+* Kinematic viscosity (`kinematic_viscosity`)
+* Mean free path (`mean_free_path`)
+* Mean particle speed (`mean_particle_speed`)
+* Number density (`number_density`)
+* Pressure (`pressure`)
+* Pressure scale height (`pressure_scale_height`)
+* Specific weight (`specific_weight`)
+* Speed of sound (`speed_of_sound`)
+* Temperature (`temperature`, `temperature_in_celsius`)
+* Thermal conductivity (`thermal_conductivity`)
 
 *Ambiance* also handles list-like input (list, tuples, *Numpy* arrays). The following code demonstrates how to produce a temperature plot with *Matplotlib*. In the example, *Numpy*'s `linspace()` function is used to produce an array with altitudes.
 
