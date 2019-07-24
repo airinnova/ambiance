@@ -174,10 +174,10 @@ class Atmosphere:
         self.H = self.geom2geop_height()
 
     def __str__(self):
-        return f'Atmosphere({self.h})'
+        return f'{self.__class__.__name__}({list(self.h)})'
 
     def __repr__(self):
-        return f'Atmosphere({self.h})'
+        return f'{self.__class__.__name__}({list(self.h)})'
 
     def _parse_height(self):
         """
@@ -391,8 +391,3 @@ class Atmosphere:
 
         T = self.temperature
         return 2.648151e-3*T**(3/2)/(T + (245.4*10**(-12/T)))
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

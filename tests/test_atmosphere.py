@@ -12,6 +12,25 @@ from ambiance import Atmosphere, Constant
 from table_data import table_data
 
 
+def test_version():
+
+    from ambiance.__version__ import __version__
+
+    print(__version__)
+
+
+def test_repr():
+
+    assert repr(Atmosphere(0)) == 'Atmosphere([0])'
+    assert repr(Atmosphere([1, 100, 1000])) == 'Atmosphere([1, 100, 1000])'
+
+
+def test_str():
+
+    assert str(Atmosphere(0)) == 'Atmosphere([0])'
+    assert str(Atmosphere([1, 100, 1000])) == 'Atmosphere([1, 100, 1000])'
+
+
 def test_invalid_inputs():
     """
     Do not allow strange input
@@ -161,6 +180,17 @@ def test_kelvin_celsius_conversion():
 
     for T in np.arange(0, 1000, 30):
         assert T == approx(Atmosphere.t2T(Atmosphere.T2t(T)))
+
+
+def test_geom_geop_height_conversion():
+    """
+    Test conversion between geometric and geopotential height
+    """
+
+    geom_height_in = np.arange(-5e3, 80e3, 1e3)
+    geom_height_out = Atmosphere(geom_height_in).geop2geom_height()
+
+    assert np.testing.assert_allclose(geom_height_out, geom_height_in) == None
 
 
 if __name__ == '__main__':
