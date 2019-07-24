@@ -1,10 +1,10 @@
 sudo: false
 language: python
 python:
-    - "3.6"
+  - "3.6"
 install:
-    - pip install -r requirements.txt
+  - pip install -r requirements.txt
 script:
-    - tox
+  - tox
 after_success:
-    - codecov
+  - codecov
