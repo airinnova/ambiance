@@ -74,6 +74,11 @@ rst_prolog = f"""
 .. |name_bold| replace:: **{Name}**
 .. |author1| replace:: Aaron Dettmann
 .. |license| replace:: *Apache-2.0*
+.. _PyPI: https://pypi.org/project/ambiance/
+.. _pip: https://pypi.org/project/pip/
+.. _numpy: https://pypi.org/project/numpy/
+.. _Numpy: https://pypi.org/project/numpy/
+.. _SI units: https://en.wikipedia.org/wiki/International_System_of_Units
 """
 
 # -- Options for HTML output -------------------------------------------------

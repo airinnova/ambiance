@@ -1,11 +1,25 @@
 Changelog
 =========
 
-Changelog for |name_bold|. Version numbers try to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[0.1.0] -- 2019-07-26
+---------------------
 
-[0.0.1] -- 2019-07-11 (A. Dettmann)
------------------------------------
+Added
+~~~~~
+
+* Added test cases for full test coverage
+* Integration with `CI <https://en.wikipedia.org/wiki/Continuous_integration>`_ service
+* Updated the documentation
+
+Changed
+~~~~~~~
+
+* Minor changes in the |name| module
+
+[0.0.1] -- 2019-07-11
+---------------------
 
 Added
 ~~~~~

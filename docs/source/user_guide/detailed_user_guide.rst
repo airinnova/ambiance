@@ -4,21 +4,23 @@ User Guide
 Creating an Atmosphere object
 -----------------------------
 
-|name| provides a class called `Atmosphere` from which aerodynamic properties can be derived. An instance of `Atmosphere` can be instantiated with the altitudes at which aerodynamic properties are to be evaluated. If you wanted to know some properties at, say, *0 m*, *1000 m* and *10000 m*, all you need to do is to call `Atmosphere` with these altitudes.
+|name| provides a class called `Atmosphere` from which atmospheric properties can be derived. An instance of `Atmosphere` can be created with the altitudes at which atmospheric properties are to be evaluated.
+
+**Example** If you wanted to know some properties at, say, *0 m*, *1000 m* and *10000 m*, all you need to do is to call `Atmosphere` with these altitudes.
 
 .. code:: python
 
     >>> from ambiance import Atmosphere
 
-    >>> atmosphere = Atmosphere([0, 1e3, 1e4])
+    >>> atmosphere = Atmosphere([0, 1000, 10000])
 
 .. hint::
 
-    `Atmosphere` takes the **geometric height** (altitude above mean sea level). The geometric height is not to be confused with the **geopotential height**.
+    `Atmosphere` takes the **geometric height** (altitude above mean sea level) as input. The geometric height is not to be confused with the **geopotential height**.
 
     * https://en.wikipedia.org/wiki/Geopotential_height
 
-    The `Atmosphere` will actually keep track of both geometric and geopotential height:
+    The `Atmosphere` will keep track of both geometric and geopotential height:
 
     .. code:: python
 
@@ -31,7 +33,7 @@ Creating an Atmosphere object
 Computing atmospheric properties
 --------------------------------
 
-`Atmosphere` provides attributes with the atmospheric properties of interest. For instance, *pressure*, *gravitational acceleration* and *speed of sound* can be retrieved with:
+`Atmosphere` provides attributes with atmospheric properties of interest. For instance, *pressure*, *gravitational acceleration* and *speed of sound* can be retrieved with:
 
 .. code:: python
 
@@ -45,10 +47,49 @@ Computing atmospheric properties
 
 .. hint::
 
-    All properties will be returned in SI units (or SI derived units). In the above example, pressure is given in *[newton/ meter²]*, gravitational acceleration in *[meter/second²]* and speed of sound in *[meter/second]*.
+    All properties will be returned in `SI units`_ (or SI derived units). In the above example, pressure is given in *[newton/ meter²]*, gravitational acceleration in *[meter/second²]* and speed of sound in *[meter/second]*.
 
-    * https://en.wikipedia.org/wiki/International_System_of_Units
+**List of available atmospheric properties**
 
-TODO: full list...
+* Collision frequency (`collision_frequency`)
+* Density (`density`)
+* Dynamic viscosity (`dynamic_viscosity`)
+* Gravitational acceleration (`grav_accel`)
+* Kinematic viscosity (`kinematic_viscosity`)
+* Mean free path (`mean_free_path`)
+* Mean particle speed (`mean_particle_speed`)
+* Number density (`number_density`)
+* Pressure (`pressure`)
+* Pressure scale height (`pressure_scale_height`)
+* Specific weight (`specific_weight`)
+* Speed of sound (`speed_of_sound`)
+* Temperature (`temperature`, `temperature_in_celsius`)
+* Thermal conductivity (`thermal_conductivity`)
 
-TODO: converters
+Converting units
+----------------
+
+|name| also provides functions to convert between different units.
+
+Kelvin and degree Celsius
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Convert from a temperature in degree Celsius to a temperature in Kelvin:
+
+.. code:: python
+
+    >>> Atmosphere.t2T(0)
+    273.15
+
+    >>> Atmosphere.t2T([0, 10, 30.5])
+    array([273.15, 283.15, 303.65])
+
+Convert from a temperature in Kelvin to a temperature in Celsius:
+
+.. code:: python
+
+    >>> Atmosphere.T2t(273.15)
+    0.0
+
+    >>> Atmosphere.T2t([273.15, 283.15, 303.65])
+    array([ 0. , 10. , 30.5])

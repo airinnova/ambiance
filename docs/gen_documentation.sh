@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# DOCUMENTATION GENERATION
+#
+# Sphinx is used to generate the documentation
+# See: http://www.sphinx-doc.org/en/master/
+
 make_list="$@"
 
 if [[ "$make_list" == "" ]]; then

@@ -9,17 +9,21 @@ Welcome to |name|'s documentation!
 Introduction
 ------------
 
-|name_bold| is a full implementation of the ICAO standard atmosphere 1993 written in Python. |name| allows you to create an 'Atmosphere object' from which aerodynamic properties can be easily derived.
+|name_bold| is a full implementation of the ICAO standard atmosphere 1993 written in Python. |name| allows you to create an 'Atmosphere object' from which atmospheric properties can be easily derived in a human-readable form.
 
 .. code:: python
 
     from ambiance import Atmosphere
 
+    sealevel = Atmosphere(0)
+    sealevel.pressure     # --> 101325. Pascal
+    sealevel.temperature  # --> 288.15 Kelvin
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: User guide
 
-   user_guide/requirements
+   user_guide/installation
    user_guide/detailed_user_guide
 
 .. toctree::
@@ -34,15 +38,8 @@ Introduction
 
    CHANGELOG.md
 
-
-Authors
-~~~~~~~
-
 :Author:
     |author1|
-
-Licence
-~~~~~~~
 
 :Licence:
     |license|

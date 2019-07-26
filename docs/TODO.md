@@ -12,3 +12,5 @@
 * Features
     * Return name of layer
         * >>> Atmosphere(0).layer_name --> 'Troposphere'
+    * Converters (--> separate class?)
+        * bar to MPa

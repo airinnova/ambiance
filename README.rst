@@ -48,7 +48,7 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
     >>> sealevel.kinematic_viscosity
     array([1.46071857e-05])
 
-The following atmospheric properties are available:
+**List of available atmospheric properties**
 
 * Collision frequency (`collision_frequency`)
 * Density (`density`)
@@ -96,7 +96,7 @@ For all functionality see the `complete documentation <https://ambiance.readthed
 Installation
 ============
 
-*Ambiance* is available on `PyPi <https://pypi.org/project/ambiance/>`_ and may simply be installed with
+*Ambiance* is available on `PyPI <https://pypi.org/project/ambiance/>`_ and may simply be installed with
 
 .. code::
 
