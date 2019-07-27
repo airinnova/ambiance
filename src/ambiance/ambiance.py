@@ -123,6 +123,24 @@ class Constant:
         [80.0e3, 196.65, -2.0e-3, 8.86272e-1],
         ]
 
+# -------------------------------------------------------------
+    # Dictionary --> layer numbers : properties
+    layers = {}
+    i = 0
+    for row1, row2 in pairwise(LAYER_SPEC_PROP):
+        i += 1
+        H1, T1, beta1, p1 = row1
+        H2, T2, beta2, p2 = row2
+
+        layers[i] = {
+                "from": H1,
+                "to": H2,
+                "T": T1,
+                "beta": beta1,
+                "p": p1,
+                }
+# -------------------------------------------------------------
+
 
 class Atmosphere:
     """
@@ -172,6 +190,11 @@ class Atmosphere:
         self.h = h
         self._parse_height()
         self.H = self.geom2geop_height()
+
+# -------------------------------------------------------------
+        # Number of the current layer
+        self.layer_num = None
+# -------------------------------------------------------------
 
     def __str__(self):
         return f'{self.__class__.__name__}({list(self.h)})'
@@ -237,32 +260,53 @@ class Atmosphere:
             :(H_b, T_b, beta): (tuple) layer specific data
         """
 
-        prop = Constant.LAYER_SPEC_PROP
+# -------------------------------------------------------------
+        # TODO:
+        # - Only determine layer number here and do property lookups where needed?
 
-        H_b = np.array([])
-        T_b = np.array([])
-        beta = np.array([])
-        p_b = np.array([])
+        H_b = np.zeros_like(self.H)
+        T_b = np.zeros_like(self.H)
+        beta = np.zeros_like(self.H)
+        p_b = np.zeros_like(self.H)
 
-        for H in self.H:
-            for row1, row2 in pairwise(prop):
-                H_layer1 = row1[0]
-                H_layer2 = row2[0]
+        self.layer_num = np.zeros_like(self.H)
 
-                if H_layer1 <= H < H_layer2 or H < -5000:
-                    H_b = np.append(H_b, [row1[0]])
-                    T_b = np.append(T_b, [row1[1]])
-                    beta = np.append(beta, [row1[2]])
-                    p_b = np.append(p_b, [row1[3]])
-                    break
+        layers = Constant.layers
+        for i in range(1, 8+1):
+            # pos_in_layer = layers[i]['from'] <= self.H < layers[i]['to']
+            pos_in_layer = (self.H >= layers[i]['from']) & (self.H < layers[i]['to'])
+            pos_in_layer = pos_in_layer.astype(int)
+            self.layer_num += pos_in_layer*i
 
-                # Last layer
-                elif H > 80_000 and H_layer2 == 80_000:
-                    H_b = np.append(H_b, [row2[0]])
-                    T_b = np.append(T_b, [row2[1]])
-                    beta = np.append(beta, [row2[2]])
-                    p_b = np.append(p_b, [row2[3]])
-                    break
+            H_b += pos_in_layer*layers[i]['from']
+            T_b += pos_in_layer*layers[i]['T']
+            beta += pos_in_layer*layers[i]['beta']
+            p_b += pos_in_layer*layers[i]['p']
+
+#########################
+        # Special cases (geopotential height can acutally be <-5000 or >80000)
+#########################
+        pos_in_layer = self.H < -5000
+        i = 1
+        pos_in_layer = pos_in_layer.astype(int)
+        self.layer_num += pos_in_layer*i
+
+        H_b += pos_in_layer*layers[i]['from']
+        T_b += pos_in_layer*layers[i]['T']
+        beta += pos_in_layer*layers[i]['beta']
+        p_b += pos_in_layer*layers[i]['p']
+#########################
+        pos_in_layer = self.H > 80000
+        i = 8
+        pos_in_layer = pos_in_layer.astype(int)
+        self.layer_num += pos_in_layer*i
+
+        H_b += pos_in_layer*layers[i]['from']
+        T_b += pos_in_layer*layers[i]['T']
+        beta += pos_in_layer*layers[i]['beta']
+        p_b += pos_in_layer*layers[i]['p']
+#########################
+# -------------------------------------------------------------
 
         return (H_b, T_b, beta, p_b)
 
