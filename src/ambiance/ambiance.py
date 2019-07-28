@@ -319,12 +319,14 @@ class Atmosphere:
     def geom2geop_height(h):
         """Convert geometric height 'h' to geopotential height 'H'"""
 
+        h = np.asarray(h)
         return Constant.r*h/(Constant.r + h)
 
     @staticmethod
     def geop2geom_height(H):
         """Convert geopotential height 'H' to geometric height 'h'"""
 
+        H = np.asarray(H)
         return Constant.r*H/(Constant.r - H)
 
     @staticmethod

@@ -21,4 +21,5 @@ Installation
 Requirements
 ------------
 
-|name| requires *Python 3.6* or higher. `Numpy`_ is also required and will be automatically installed when you install |name| from `PyPI`_.
+* *Python 3.6* or higher
+* `Numpy`_ (will be automatically installed when you install |name| from `PyPI`_)

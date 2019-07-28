@@ -226,12 +226,21 @@ def test_geom_geop_height_conversion():
     Test conversion between geometric and geopotential height
     """
 
-    geom_height_in = np.arange(-5e3, 80e3, 1e3)
+    # Test different inputs
+    inputs = [
+            np.arange(-5e3, 80e3, 1e3),
+            (-5e3, 80e3, 1e3),
+            [-5e3, 80e3, 1e3],
+            -5000,
+            ]
 
-    geop_height_out = Atmosphere.geom2geop_height(geom_height_in)
-    geom_height_out = Atmosphere.geop2geom_height(geop_height_out)
+    for in_data in inputs:
+        geom_height_in = np.arange(-5e3, 80e3, 1e3)
 
-    assert np.testing.assert_allclose(geom_height_out, geom_height_in) is None
+        geop_height_out = Atmosphere.geom2geop_height(geom_height_in)
+        geom_height_out = Atmosphere.geop2geom_height(geop_height_out)
+
+        assert np.testing.assert_allclose(geom_height_out, geom_height_in) is None
 
 
 if __name__ == '__main__':

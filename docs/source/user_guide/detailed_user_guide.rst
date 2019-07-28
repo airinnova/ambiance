@@ -20,7 +20,7 @@ Creating an Atmosphere object
 
     * https://en.wikipedia.org/wiki/Geopotential_height
 
-    The `Atmosphere` will keep track of both geometric and geopotential height:
+    `Atmosphere` will keep track of both geometric and geopotential height:
 
     .. code:: python
 
@@ -29,6 +29,18 @@ Creating an Atmosphere object
         >>> atmosphere.H  # Geopotential height
         [   0.          999.84271205 9984.29343877]
 
+    The `Atmosphere` class does only take *geometric* heights as input as this is the typical use. However, if you really wanted to request properties based on the *geopotential* height, you can convert the geopotential height to geometric height, and then call `Atmosphere`.
+
+    .. code:: python
+
+        >>> # Convert from geopotential to geometric heights
+        >>> h = Atmosphere.geop2geom_height([0, 1000, 10000])
+        >>> atmosphere = Atmosphere(h)
+
+        >>> atmosphere.h
+        array([    0.        ,  1000.15733745, 10015.75605592])
+        >>> atmosphere.H
+        array([    0.,  1000., 10000.])
 
 Computing atmospheric properties
 --------------------------------
@@ -66,10 +78,10 @@ Computing atmospheric properties
 * Temperature (`temperature`, `temperature_in_celsius`)
 * Thermal conductivity (`thermal_conductivity`)
 
-Input
------
+Input data
+----------
 
-The height passed to `Atmosphere` can be a single value, a vector (list) or a matrix. The heights do not have to be ordered in any specific way.
+The height data passed to `Atmosphere` can be a single value (integers, floats), a vector (list, tuple, *Numpy* vector) or a matrix (iterable of an iterable, *Numpy* matrix). The heights do not have to be ordered in any specific way.
 
 .. code:: python
 
@@ -114,3 +126,16 @@ Convert from a temperature in Kelvin to a temperature in Celsius:
 
     >>> Atmosphere.T2t([273.15, 283.15, 303.65])
     array([ 0. , 10. , 30.5])
+
+Geometric and geopotential height
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Convert from a *geometric* to a *geopotential* height.
+
+>>> Atmosphere.geom2geop_height(10000)
+9984.293438772525
+
+Convert from a *geopotential* to a *geometric* height.
+
+>>> Atmosphere.geop2geom_height(9984.293438772525)
+10000.0
