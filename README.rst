@@ -65,15 +65,15 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
 * Temperature (`temperature`, `temperature_in_celsius`)
 * Thermal conductivity (`thermal_conductivity`)
 
+**List-like input**
+
 *Ambiance* also handles list-like input (list, tuples, *Numpy* arrays). The following code demonstrates how to produce a temperature plot with *Matplotlib*. In the example, *Numpy*'s `linspace()` function is used to produce an array with altitudes.
 
 .. code:: python
 
     import numpy as np
     import matplotlib.pyplot as plt
-
     from ambiance import Atmosphere
-
 
     # Make an atmosphere object
     heights = np.linspace(-5e3, 80e3, num=1000)
@@ -90,6 +90,31 @@ The output is
 
 .. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/tests/temperature_plot.png
    :alt: Temperature plot
+
+**Matrix-like input**
+
+Similarly, you can also pass in entire *matrices*. Example:
+
+.. code:: python
+
+    >>> import numpy as np
+    >>> from ambiance import Atmosphere
+
+    >>> h = np.array([[0, 11, 12], [20, 21, 35], [0, 80, 50]])*1000
+    >>> h  # Geometric heights in metres
+    array([[    0, 11000, 12000],
+           [20000, 21000, 35000],
+           [    0, 80000, 50000]])
+
+    >>> Atmosphere(h).temperature
+    array([[288.15      , 216.7735127 , 216.65      ],
+           [216.65      , 217.58085353, 236.51337209],
+           [288.15      , 198.63857625, 270.65      ]])
+
+    >>> Atmosphere(h).speed_of_sound
+    array([[340.29398803, 295.15359145, 295.06949351],
+           [295.06949351, 295.70270856, 308.29949587],
+           [340.29398803, 282.53793156, 329.798731  ]])
 
 For all functionality see the `complete documentation <https://ambiance.readthedocs.io/en/latest/>`_.
 

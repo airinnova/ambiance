@@ -3,6 +3,15 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[0.2.0] -- 2019-07-28
+---------------------
+
+Added
+~~~~~
+
+* Added support for input in matrix form
+* Added test cases for input in matrix form
+
 [0.1.0] -- 2019-07-26
 ---------------------
 

@@ -66,6 +66,27 @@ Computing atmospheric properties
 * Temperature (`temperature`, `temperature_in_celsius`)
 * Thermal conductivity (`thermal_conductivity`)
 
+Input
+-----
+
+The height passed to `Atmosphere` can be a single value, a vector (list) or a matrix. The heights do not have to be ordered in any specific way.
+
+.. code:: python
+
+    >>> # ===== Single value input =====
+    >>> Atmosphere(1729).grav_accel
+    array([9.80131748])
+
+    >>> # ===== Vector input =====
+    >>> Atmosphere([3000, 12000, 36000]).grav_accel
+    array([9.79740029, 9.76972952, 9.69651134])
+
+    >>> # ===== Matrix input =====
+    >>> Atmosphere([3000, 12000, 36000]).grav_accel
+    >>> Atmosphere([[3000, 12000], [0, -3000]]).grav_accel
+    array([[9.79740029, 9.76972952],
+           [9.80665   , 9.81591282]])
+
 Converting units
 ----------------
 
