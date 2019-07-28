@@ -171,13 +171,25 @@ def test_table_data_matrix_input():
 
     for prop_name, exp_values in properties.items():
         computed_values = getattr(atmos, prop_name)
-        # print("--------------")
-        # print(computed_values)
-        # print()
-        # print(exp_values)
-        # print("--------------")
+        print(prop_name)
+        print(computed_values)
+        print()
+        print(exp_values)
+        print("--------------")
         assert np.testing.assert_allclose(computed_values, exp_values, rtol=1e-3) is None
 
+    # "Differently shaped" matrices
+    heights, properties = table_data.get_matrices(shape=(4, 5))
+    atmos = Atmosphere(heights)
+
+    for prop_name, exp_values in properties.items():
+        computed_values = getattr(atmos, prop_name)
+        print(prop_name)
+        print(computed_values)
+        print()
+        print(exp_values)
+        print("--------------")
+        assert np.testing.assert_allclose(computed_values, exp_values, rtol=1e-3) is None
 
 def test_kelvin_celsius_conversion():
     """

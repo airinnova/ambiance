@@ -12,6 +12,12 @@ Added
 * Added support for input in matrix form
 * Added test cases for input in matrix form
 
+Changed
+~~~~~~~
+
+* Made `Atmosphere` attributes `h` and `H` @property to indicate 'read-only'
+* Made converter between geometric and geopotential heights @staticmethod
+
 [0.1.0] -- 2019-07-26
 ---------------------
 
