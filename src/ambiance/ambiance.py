@@ -241,7 +241,7 @@ class Atmosphere:
             raise ValueError("Input array is empty")
 
         # Check that input height is in correct range
-        if any([(height < Constant.h_min or height > Constant.h_max) for height in self.h]):
+        if (self.h < Constant.h_min).any() or (self.h > Constant.h_max).any():
             raise ValueError(
                     'Value out of bounds.',
                     f'Lower limit: {Constant.h_min:.0f} m, ',

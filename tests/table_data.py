@@ -28,6 +28,8 @@
 from collections import defaultdict
 import random
 
+import numpy as np
+
 
 class TableData:
     """
@@ -67,6 +69,10 @@ class TableData:
         self.property_dict[h] = entry
 
     def get_vectors(self, return_random=False, list_len=10):
+        """
+        Return test data in vector form
+        """
+
         height = []
         properties = defaultdict(list)
 
@@ -91,6 +97,23 @@ class TableData:
                     properties[prop_name].append(value)
 
         return height, properties
+
+    def get_matrices(self, return_random=False, shape=(3, 3)):
+        """
+        Return test data in matrix form
+        """
+
+        n_elem = np.prod(shape)  # Number of elements in matrix
+
+        height, properties = self.get_vectors(return_random=return_random)
+        height = np.reshape(height[0:n_elem], shape)
+
+        properties_new = {}
+        for prop_name, value in properties.items():
+            value = np.reshape(value[0:n_elem], shape)
+            properties_new[prop_name] = value
+
+        return height, properties_new
 
 
 table_data = TableData()

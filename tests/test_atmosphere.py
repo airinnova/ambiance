@@ -140,7 +140,7 @@ def test_table_data_vector_input():
         computed_values = getattr(atmos, prop_name)
         # print(computed_values)
         # print(exp_values)
-        assert np.testing.assert_allclose(computed_values, exp_values, rtol=1e-3) == None
+        assert np.testing.assert_allclose(computed_values, exp_values, rtol=1e-3) is None
 
     # Random vectors
     heights, properties = table_data.get_vectors(return_random=True)
@@ -149,7 +149,34 @@ def test_table_data_vector_input():
 
     for prop_name, exp_values in properties.items():
         computed_values = getattr(atmos, prop_name)
-        assert np.testing.assert_allclose(computed_values, exp_values, rtol=1e-3) == None
+        assert np.testing.assert_allclose(computed_values, exp_values, rtol=1e-3) is None
+
+
+def test_table_data_matrix_input():
+    """
+    Test that matrix can be passed as input (instead of single values)
+    """
+
+    # "Sorted" matrices
+    heights, properties = table_data.get_matrices()
+    atmos = Atmosphere(heights)
+
+    for prop_name, exp_values in properties.items():
+        computed_values = getattr(atmos, prop_name)
+        assert np.testing.assert_allclose(computed_values, exp_values, rtol=1e-3) is None
+
+    # Random matrices
+    heights, properties = table_data.get_matrices(return_random=True)
+    atmos = Atmosphere(heights)
+
+    for prop_name, exp_values in properties.items():
+        computed_values = getattr(atmos, prop_name)
+        # print("--------------")
+        # print(computed_values)
+        # print()
+        # print(exp_values)
+        # print("--------------")
+        assert np.testing.assert_allclose(computed_values, exp_values, rtol=1e-3) is None
 
 
 def test_kelvin_celsius_conversion():
@@ -190,7 +217,7 @@ def test_geom_geop_height_conversion():
     geom_height_in = np.arange(-5e3, 80e3, 1e3)
     geom_height_out = Atmosphere(geom_height_in).geop2geom_height()
 
-    assert np.testing.assert_allclose(geom_height_out, geom_height_in) == None
+    assert np.testing.assert_allclose(geom_height_out, geom_height_in) is None
 
 
 if __name__ == '__main__':
