@@ -24,16 +24,17 @@ Compute atmospheric properties for heights ranging from -5 km to 80 km.
 
 The implementation is based on the ICAO standard atmosphere from 1993:
 
-    |[1] International Civil Aviation Organization
-    |    Manual Of The Icao Standard Atmosphere -- 3rd Edition 1993 (Doc 7488)
-    |    -- extended to 80 kilometres (262 500 feet)
-    |    https://store.icao.int/manual-of-the-icao-standard-atmosphere-extended-to-80-kilometres-262-500-feet-doc-7488-quadrilingual-printed.html
+    | [1] International Civil Aviation Organization
+    |     Manual Of The ICAO Standard Atmosphere -- 3rd Edition 1993 (Doc 7488)
+    |     -- extended to 80 kilometres (262 500 feet)
+    |     https://store.icao.int/manual-of-the-icao-standard-atmosphere-extended
+    |     -to-80-kilometres-262-500-feet-doc-7488-quadrilingual-printed.html
 
 Other references:
 
     | [2] Wikipedia, International Standard Atmosphere,
-    |    https://en.wikipedia.org/wiki/International_Standard_Atmosphere
-    |    Accessed: 2019-07-28
+    |     https://en.wikipedia.org/wiki/International_Standard_Atmosphere
+    |     Accessed: 2019-07-28
 """
 
 from itertools import tee
@@ -79,12 +80,28 @@ class Constant:
         :rho_0: Sea level atmospheric density [kg/m^3]
         :sigma: Effective collision diameter of an air molecule [m]
         :r: Nominal Earth's radius [m]
+
         :h_min: Lower boundary of acceptable geometric heights [m]
         :h_max: Upper boundary of acceptable geometric heights [m]
-        :LAYER_SPECIFIC_PROPERTIES: Table containing layer specific properties
+        :H_min: Lower boundary of acceptable geopotential heights [m]
+        :H_max: Upper boundary of acceptable geopotential heights [m]
+
+        :LAYER_SPEC_PROP: Table containing layer specific properties
+        :LAYER_DICT: Dictionary containing layer specific properties
+
+    Notes on 'LAYER_SPEC_PROP':
+         * Table with columns
+               * (1) :H_b: geopotential base height [m]
+               * (2) :T_b: base temperature [K]
+               * (3) :beta: base temperature gradient [kg/(m*s*K^(1/2))]
+               * (4) :p: base pressure [Pa]
+               * (5) :layer name: string representation of layer name
+         * Values for (1,2,3) from table D in [1]
+         * Values for (4) for pressure from [1]
+         * Values for (5) from [2]
     """
 
-    # Table A: primary constants
+    # Primary constants (table A)
     g_0 = 9.80665
     M_0 = 28.964420e-3
     N_A = 602.257e21
@@ -112,52 +129,42 @@ class Constant:
     H_min = -5_000
     H_max = 80_000
 
-    layer_name_a = 'Troposphere'
-    layer_name_b = 'Tropopause'
-    layer_name_c = 'Stratosphere'
-    layer_name_d = 'Stratopause'
-    layer_name_e = 'Mesosphere'
+    _LAYER_NAME_a = 'Troposphere'
+    _LAYER_NAME_b = 'Tropopause'
+    _LAYER_NAME_c = 'Stratosphere'
+    _LAYER_NAME_d = 'Stratopause'
+    _LAYER_NAME_e = 'Mesosphere'
 
-    # [1] Table D (pressure was added)
-    # H_b [m] | T_b [K] | beta [kg/(m*s*K^(1/2))] | p [Pa]
-    #
-    # Layer names from [2]
     LAYER_SPEC_PROP = [
-        [-5.0e3, 320.65, -6.5e-3, 1.77687e+5, layer_name_a],
-        [0.00e3, 288.15, -6.5e-3, 1.01325e+5, layer_name_a],
-        [11.0e3, 216.65,  0.0e-3, 2.26320e+4, layer_name_b],
-        [20.0e3, 216.65,  1.0e-3, 5.47487e+3, layer_name_c],
-        [32.0e3, 228.65,  2.8e-3, 8.68014e+2, layer_name_c],
-        [47.0e3, 270.65,  0.0e-3, 1.10906e+2, layer_name_d],
-        [51.0e3, 270.65, -2.8e-3, 6.69384e+1, layer_name_e],
-        [71.0e3, 214.65, -2.0e-3, 3.95639e+0, layer_name_e],
-        [80.0e3, 196.65, -2.0e-3, 8.86272e-1, layer_name_e],
+        [-5.0e3, 320.65, -6.5e-3, 1.77687e+5, _LAYER_NAME_a],
+        [0.00e3, 288.15, -6.5e-3, 1.01325e+5, _LAYER_NAME_a],
+        [11.0e3, 216.65,  0.0e-3, 2.26320e+4, _LAYER_NAME_b],
+        [20.0e3, 216.65,  1.0e-3, 5.47487e+3, _LAYER_NAME_c],
+        [32.0e3, 228.65,  2.8e-3, 8.68014e+2, _LAYER_NAME_c],
+        [47.0e3, 270.65,  0.0e-3, 1.10906e+2, _LAYER_NAME_d],
+        [51.0e3, 270.65, -2.8e-3, 6.69384e+1, _LAYER_NAME_e],
+        [71.0e3, 214.65, -2.0e-3, 3.95639e+0, _LAYER_NAME_e],
+        [80.0e3, 196.65, -2.0e-3, 8.86272e-1, _LAYER_NAME_e],
         ]
 
-    @classmethod
-    def get_layer_dict(cls):
-        """
-        Return a dictionary with layer specific information
+    # Number of first and last layer in atmosphere
+    LAYER_NUM_FIRST = 1
+    LAYER_NUM_LAST = len(LAYER_SPEC_PROP) - 1
 
-        Notes:
-            * key is layer number
-            * value is dictionary with layer information
-        """
+    LAYER_DICT = {}
+    for i, layer_pair in enumerate(pairwise(LAYER_SPEC_PROP), start=LAYER_NUM_FIRST):
+        # Layer properties from the base layer are valid from base to top
+        H_base, T, beta, p, layer_name = layer_pair[0]
+        H_top, _, _, _, _ = layer_pair[1]
 
-        layers = {}
-        for i, layer_pair in enumerate(pairwise(cls.LAYER_SPEC_PROP), start=1):
-            H1, T1, beta1, p1, layer_name1 = layer_pair[0]
-            H2, _, _, _, _ = layer_pair[1]
-
-            layers[i] = {
-                    "H_base": H1,
-                    "H_top": H2,
-                    "T": T1,
-                    "beta": beta1,
-                    "p": p1,
-                    "name": layer_name1,
-                    }
-        return layers
+        LAYER_DICT[i] = {
+                "H_base": H_base,
+                "H_top": H_top,
+                "T": T,
+                "beta": beta,
+                "p": p,
+                "name": layer_name,
+                }
 
 
 class Atmosphere:
@@ -203,16 +210,9 @@ class Atmosphere:
     """
 
     def __init__(self, h):
-        # Store the geometric and geopotential height.
-        # All other properties are computed on demand.
         self.h = h
-        self._parse_height()
-
-        self.H = self.geom2geop_height()
-
-        # Array of same shape as 'self.H' with identifiers (int) corresponding
-        # to the layer number.
-        self.layer_num = self._get_layer_nums()
+        self._H = self.geom2geop_height(self.h)
+        self._layer_nums = self._get_layer_nums()
 
     def __str__(self):
         return f'{self.__class__.__name__}({list(self.h)})'
@@ -220,19 +220,37 @@ class Atmosphere:
     def __repr__(self):
         return f'{self.__class__.__name__}({list(self.h)})'
 
+    @property
+    def h(self):
+        """Geometric heights"""
+        return self._h
+
+    @h.setter
+    def h(self, h):
+        self._h = h
+        self._parse_height()
+
+    @property
+    def H(self):
+        """Geopotential heights"""
+        return self._H
+
+    @property
+    def layer_nums(self):
+        """Array of same shape as 'self.H' with layer numbers (int)"""
+        return self._layer_nums
+
     def _parse_height(self):
         """
         Check and return correct representation of geometric height 'h'
-
-        For internal use. Not intended to be called by the user.
         """
 
         # Number-like or array-like input is accepted
         if isinstance(self.h, (int, float, list, tuple)):
-            self.h = np.asarray(self.h)
+            self._h = np.asarray(self.h)
 
             if self.h.ndim == 0:
-                self.h = self.h[None]  # Make 1D array
+                self._h = self.h[None]  # Make 1D array
 
         elif not isinstance(self.h, np.ndarray):
             raise TypeError('Input data type not accepted')
@@ -245,50 +263,30 @@ class Atmosphere:
             raise ValueError(
                     'Value out of bounds.',
                     f'Lower limit: {Constant.h_min:.0f} m, ',
-                    f'Upper limit: {Constant.h_max:.0f} m')
-
-    def geom2geop_height(self):
-        """Convert geometric height 'h' to geopotential height 'H'"""
-
-        return Constant.r*self.h/(Constant.r + self.h)
-
-    def geop2geom_height(self):
-        """Convert geopotential height 'H' to geometric height 'h'"""
-
-        return Constant.r*self.H/(Constant.r - self.H)
-
-    @staticmethod
-    def t2T(t):
-        """Convert from temperature 't' in degree Celsius to 'T' in Kelvin"""
-
-        return Constant.T_i + np.asarray(t)
-
-    @staticmethod
-    def T2t(T):
-        """Convert from temperature 'T' in Kelvin to 't' in degree Celsius"""
-
-        return np.asarray(T) - Constant.T_i
+                    f'Upper limit: {Constant.h_max:.0f} m'
+                    )
 
     def _get_layer_nums(self):
         """
-        Return array of same shape as 'self.H' with corresponding layer number
+        Return array of same shape as 'self.H' with corresponding layer numbers
         """
 
-        layers = Constant.get_layer_dict()
-        layer_num = np.zeros_like(self.H)
+        layers = Constant.LAYER_DICT
+        layer_nums = np.zeros_like(self.H)
 
         for i in layers.keys():
             pos_in_layer = (self.H >= layers[i]['H_base']) & (self.H < layers[i]['H_top'])
-            layer_num += pos_in_layer.astype(int)*i
+            layer_nums += pos_in_layer.astype(int)*i
 
-        # Special cases (geopotential height can acutally be <-5000 or >80000)
-        pos_in_layer = (self.H < -5000).astype(int)
-        layer_num += pos_in_layer*1
+        # Special case: geopotential height <-5000
+        pos_in_layer = (self.H < Constant.H_min).astype(int)
+        layer_nums += pos_in_layer*Constant.LAYER_NUM_FIRST
 
-        pos_in_layer = (self.H >= 80000).astype(int)
-        layer_num += pos_in_layer*8
+        # Special case: geopotential height>80000
+        pos_in_layer = (self.H >= Constant.H_max).astype(int)
+        layer_nums += pos_in_layer*Constant.LAYER_NUM_LAST
 
-        return layer_num.astype(int)
+        return layer_nums.astype(int)
 
     def _get_layer_params(self):
         """
@@ -305,17 +303,41 @@ class Atmosphere:
         beta = np.zeros_like(self.H)
         p_b = np.zeros_like(self.H)
 
-        layers = Constant.get_layer_dict()
+        layers = Constant.LAYER_DICT
 
-        for layer_num in layers.keys():
-            pos_in_layer = (self.layer_num == layer_num).astype(int)
+        for i in layers.keys():
+            pos_in_layer = (self.layer_nums == i).astype(int)
 
-            H_b += pos_in_layer*layers[layer_num]['H_base']
-            T_b += pos_in_layer*layers[layer_num]['T']
-            beta += pos_in_layer*layers[layer_num]['beta']
-            p_b += pos_in_layer*layers[layer_num]['p']
+            H_b += pos_in_layer*layers[i]['H_base']
+            T_b += pos_in_layer*layers[i]['T']
+            beta += pos_in_layer*layers[i]['beta']
+            p_b += pos_in_layer*layers[i]['p']
 
         return (H_b, T_b, beta, p_b)
+
+    @staticmethod
+    def geom2geop_height(h):
+        """Convert geometric height 'h' to geopotential height 'H'"""
+
+        return Constant.r*h/(Constant.r + h)
+
+    @staticmethod
+    def geop2geom_height(H):
+        """Convert geopotential height 'H' to geometric height 'h'"""
+
+        return Constant.r*H/(Constant.r - H)
+
+    @staticmethod
+    def t2T(t):
+        """Convert from temperature 't' in degree Celsius to 'T' in Kelvin"""
+
+        return Constant.T_i + np.asarray(t)
+
+    @staticmethod
+    def T2t(T):
+        """Convert from temperature 'T' in Kelvin to 't' in degree Celsius"""
+
+        return np.asarray(T) - Constant.T_i
 
     @property
     def grav_accel(self):

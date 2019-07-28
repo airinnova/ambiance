@@ -215,7 +215,9 @@ def test_geom_geop_height_conversion():
     """
 
     geom_height_in = np.arange(-5e3, 80e3, 1e3)
-    geom_height_out = Atmosphere(geom_height_in).geop2geom_height()
+
+    geop_height_out = Atmosphere.geom2geop_height(geom_height_in)
+    geom_height_out = Atmosphere.geop2geom_height(geop_height_out)
 
     assert np.testing.assert_allclose(geom_height_out, geom_height_in) is None
 
