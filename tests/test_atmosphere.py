@@ -3,6 +3,8 @@
 
 # Author: Aaron Dettmann
 
+from collections import defaultdict
+
 import pytest
 from pytest import approx, main
 import numpy as np
@@ -39,13 +41,24 @@ def test_invalid_inputs():
     with pytest.raises(TypeError):
         Atmosphere()
 
-    # Wrong types
-    for invalid_input in [None, dict, str]:
+    type_errors = [
+            None,
+            dict,
+            str,
+            ]
+
+    value_errors = [
+            [],
+            (),
+            [[]],
+            [1, [2, 3]]
+            ]
+
+    for invalid_input in type_errors:
         with pytest.raises(TypeError):
             Atmosphere(invalid_input)
 
-    # Empty arrarys
-    for invalid_input in [[], (), [[]]]:
+    for invalid_input in value_errors:
         with pytest.raises(ValueError):
             Atmosphere(invalid_input)
 
@@ -190,6 +203,61 @@ def test_table_data_matrix_input():
         print(exp_values)
         print("--------------")
         assert np.testing.assert_allclose(computed_values, exp_values, rtol=1e-3) is None
+
+
+def test_data_types():
+    """
+    Test that input of different data types consistently produces same output
+
+    See: https://github.com/aarondettmann/ambiance/issues/1
+    """
+
+    # ------------------------------
+    # ----- Single value input -----
+    # ------------------------------
+    height = 11000
+    entry = table_data.property_dict[height]
+
+    h_types = [
+            int(height),
+            float(height),
+            [int(height)],
+            np.array(height, dtype=int),
+            np.array(height, dtype=float),
+            ]
+
+    for h in h_types:
+        print(repr(h))
+        for prop_name, value in entry.items():
+            computed = getattr(Atmosphere(h), prop_name)
+            assert computed == approx(value, 1e-3)
+
+    # -----------------------------------
+    # ----- Vector-like value input -----
+    # -----------------------------------
+    heights = [11000, 20000, 75895]
+    entries = [table_data.property_dict[height] for height in heights]
+
+    exp_values = defaultdict(list)
+    for entry in entries:
+        for prop_name in table_data.PROPERTY_NAMES:
+            exp_values[prop_name].append(entry[prop_name])
+
+    h_types = [
+            list(int(height) for height in heights),
+            tuple(int(height) for height in heights),
+            list(float(height) for height in heights),
+            tuple(float(height) for height in heights),
+            np.array(heights, dtype=int),
+            np.array(heights, dtype=float),
+            ]
+
+    for h in h_types:
+        print(repr(h))
+        for prop_name, value in exp_values.items():
+            computed = getattr(Atmosphere(h), prop_name)
+            assert computed == approx(value, 1e-3)
+
 
 def test_kelvin_celsius_conversion():
     """

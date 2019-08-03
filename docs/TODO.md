@@ -1,7 +1,6 @@
 ## TODO
 
 * Testing
-    * Check invalid inputs --> e.g. [1, [2, 3]]
     * Add test cases for matrices >2D
 
 * Features

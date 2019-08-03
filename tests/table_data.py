@@ -38,8 +38,7 @@ class TableData:
 
     PROPERTY_NAMES = [
             # Table 1
-            "geom_height",
-            "geop_height",
+            "H",  # Geopotential height
             "temperature",
             "temperature_in_celsius",
             "pressure",
