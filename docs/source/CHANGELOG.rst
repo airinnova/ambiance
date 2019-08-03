@@ -3,6 +3,15 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[0.2.1] -- 2019-08-03
+---------------------
+
+Fixed
+~~~~~
+
+* `int` and `float` input reported to produce different values
+    * See https://github.com/aarondettmann/ambiance/issues/1
+
 [0.2.0] -- 2019-07-28
 ---------------------
 

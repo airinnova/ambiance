@@ -247,7 +247,7 @@ class Atmosphere:
 
         # Number-like or array-like input is accepted
         if isinstance(self.h, (int, float, list, tuple)):
-            self._h = np.asarray(self.h)
+            self._h = np.asarray(self.h, dtype=float)
 
             if self.h.ndim == 0:
                 self._h = self.h[None]  # Make 1D array
@@ -257,6 +257,9 @@ class Atmosphere:
 
         if self.h.size == 0:
             raise ValueError("Input array is empty")
+
+        # Always work with float
+        self._h = self._h.astype(dtype=float)
 
         # Check that input height is in correct range
         if (self.h < Constant.h_min).any() or (self.h > Constant.h_max).any():

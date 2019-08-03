@@ -21,14 +21,14 @@ def test_version():
 
 def test_repr():
 
-    assert repr(Atmosphere(0)) == 'Atmosphere([0])'
-    assert repr(Atmosphere([1, 100, 1000])) == 'Atmosphere([1, 100, 1000])'
+    assert repr(Atmosphere(0)) == 'Atmosphere([0.0])'
+    assert repr(Atmosphere([1, 100, 1000])) == 'Atmosphere([1.0, 100.0, 1000.0])'
 
 
 def test_str():
 
-    assert str(Atmosphere(0)) == 'Atmosphere([0])'
-    assert str(Atmosphere([1, 100, 1000])) == 'Atmosphere([1, 100, 1000])'
+    assert str(Atmosphere(0)) == 'Atmosphere([0.0])'
+    assert str(Atmosphere([1, 100, 1000])) == 'Atmosphere([1.0, 100.0, 1000.0])'
 
 
 def test_invalid_inputs():
