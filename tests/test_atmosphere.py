@@ -9,7 +9,7 @@ import pytest
 from pytest import approx, main
 import numpy as np
 
-from ambiance import Atmosphere, Constant
+from ambiance import Atmosphere, CONST
 
 from table_data import table_data
 
@@ -69,8 +69,8 @@ def test_out_of_bounds_error():
     """
 
     # Minimal and maximal heights
-    min_height = Constant.h_min
-    max_height = Constant.h_max
+    min_height = CONST.h_min
+    max_height = CONST.h_max
 
     # Make exact values of min and max heights don't raise errors
     for boundary_height in [min_height, max_height]:

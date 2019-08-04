@@ -56,7 +56,7 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-class Constant:
+class _Const:
     """
     Constants defined in the ICAO standard atmosphere (1993)
 
@@ -167,6 +167,9 @@ class Constant:
                 }
 
 
+CONST = _Const
+
+
 class Atmosphere:
     """
     Representation of the ICAO standard atmosphere (1993)
@@ -262,11 +265,11 @@ class Atmosphere:
         self._h = self._h.astype(dtype=float)
 
         # Check that input height is in correct range
-        if (self.h < Constant.h_min).any() or (self.h > Constant.h_max).any():
+        if (self.h < CONST.h_min).any() or (self.h > CONST.h_max).any():
             raise ValueError(
                     'Value out of bounds.',
-                    f'Lower limit: {Constant.h_min:.0f} m, ',
-                    f'Upper limit: {Constant.h_max:.0f} m'
+                    f'Lower limit: {CONST.h_min:.0f} m, ',
+                    f'Upper limit: {CONST.h_max:.0f} m'
                     )
 
     def _get_layer_nums(self):
@@ -274,7 +277,7 @@ class Atmosphere:
         Return array of same shape as 'self.H' with corresponding layer numbers
         """
 
-        layers = Constant.LAYER_DICT
+        layers = CONST.LAYER_DICT
         layer_nums = np.zeros_like(self.H)
 
         for i in layers.keys():
@@ -282,12 +285,12 @@ class Atmosphere:
             layer_nums += pos_in_layer.astype(int)*i
 
         # Special case: geopotential height <-5000
-        pos_in_layer = (self.H < Constant.H_min).astype(int)
-        layer_nums += pos_in_layer*Constant.LAYER_NUM_FIRST
+        pos_in_layer = (self.H < CONST.H_min).astype(int)
+        layer_nums += pos_in_layer*CONST.LAYER_NUM_FIRST
 
         # Special case: geopotential height>80000
-        pos_in_layer = (self.H >= Constant.H_max).astype(int)
-        layer_nums += pos_in_layer*Constant.LAYER_NUM_LAST
+        pos_in_layer = (self.H >= CONST.H_max).astype(int)
+        layer_nums += pos_in_layer*CONST.LAYER_NUM_LAST
 
         return layer_nums.astype(int)
 
@@ -306,7 +309,7 @@ class Atmosphere:
         beta = np.zeros_like(self.H)
         p_b = np.zeros_like(self.H)
 
-        layers = Constant.LAYER_DICT
+        layers = CONST.LAYER_DICT
 
         for i in layers.keys():
             pos_in_layer = (self.layer_nums == i).astype(int)
@@ -323,32 +326,32 @@ class Atmosphere:
         """Convert geometric height 'h' to geopotential height 'H'"""
 
         h = np.asarray(h)
-        return Constant.r*h/(Constant.r + h)
+        return CONST.r*h/(CONST.r + h)
 
     @staticmethod
     def geop2geom_height(H):
         """Convert geopotential height 'H' to geometric height 'h'"""
 
         H = np.asarray(H)
-        return Constant.r*H/(Constant.r - H)
+        return CONST.r*H/(CONST.r - H)
 
     @staticmethod
     def t2T(t):
         """Convert from temperature 't' in degree Celsius to 'T' in Kelvin"""
 
-        return Constant.T_i + np.asarray(t)
+        return CONST.T_i + np.asarray(t)
 
     @staticmethod
     def T2t(T):
         """Convert from temperature 'T' in Kelvin to 't' in degree Celsius"""
 
-        return np.asarray(T) - Constant.T_i
+        return np.asarray(T) - CONST.T_i
 
     @property
     def grav_accel(self):
         """Compute gravitational acceleration 'g' for given geometric height 'h'"""
 
-        return Constant.g_0*(Constant.r/(Constant.r + self.h))**2
+        return CONST.g_0*(CONST.r/(CONST.r + self.h))**2
 
     @property
     def temperature(self):
@@ -379,12 +382,12 @@ class Atmosphere:
 
         # Pressure if beta == 0
         T = self.temperature
-        pressue_beta_zero = p_b*np.exp((-Constant.g_0/(Constant.R*T))*(self.H - H_b))
+        pressue_beta_zero = p_b*np.exp((-CONST.g_0/(CONST.R*T))*(self.H - H_b))
         pressure = pressure + pressue_beta_zero*beta_zero
 
         # Pressure if beta != 0
         exponent = np.divide(1, beta, out=np.zeros_like(beta), where=beta!=0)
-        pressue_beta_nozero = p_b*(1 + (beta/T_b)*(self.H - H_b))**(exponent*(-Constant.g_0/Constant.R))
+        pressue_beta_nozero = p_b*(1 + (beta/T_b)*(self.H - H_b))**(exponent*(-CONST.g_0/CONST.R))
         pressure = pressure + pressue_beta_nozero*beta_nonzero
 
         return pressure
@@ -395,7 +398,7 @@ class Atmosphere:
 
         p = self.pressure
         T = self.temperature
-        return p/(Constant.R*T)
+        return p/(CONST.R*T)
 
     @property
     def specific_weight(self):
@@ -409,7 +412,7 @@ class Atmosphere:
 
         T = self.temperature
         g = self.grav_accel
-        return Constant.R*T/g
+        return CONST.R*T/g
 
     @property
     def number_density(self):
@@ -417,21 +420,21 @@ class Atmosphere:
 
         p = self.pressure
         T = self.temperature
-        return Constant.N_A*p/(Constant.R_star*T)
+        return CONST.N_A*p/(CONST.R_star*T)
 
     @property
     def mean_particle_speed(self):
         """Compute the mean particle speed :nu_bar: for given geometric height 'h'"""
 
         T = self.temperature
-        return np.sqrt((8/np.pi)*Constant.R*T)
+        return np.sqrt((8/np.pi)*CONST.R*T)
 
     @property
     def mean_free_path(self):
         """Compute the mean free path :l: for given geometric height 'h'"""
 
         n = self.number_density
-        return 1/(np.sqrt(2)*np.pi*Constant.sigma**2*n)
+        return 1/(np.sqrt(2)*np.pi*CONST.sigma**2*n)
 
     @property
     def collision_frequency(self):
@@ -439,21 +442,21 @@ class Atmosphere:
 
         p = self.pressure
         T = self.temperature
-        return 4*Constant.sigma**2*Constant.N_A*(np.sqrt(np.pi/(Constant.R_star*Constant.M_0)))*(p/np.sqrt(T))
+        return 4*CONST.sigma**2*CONST.N_A*(np.sqrt(np.pi/(CONST.R_star*CONST.M_0)))*(p/np.sqrt(T))
 
     @property
     def speed_of_sound(self):
         """Compute the speed of sound 'a' for given geometric height 'h'"""
 
         T = self.temperature
-        return np.sqrt(Constant.kappa*Constant.R*T)
+        return np.sqrt(CONST.kappa*CONST.R*T)
 
     @property
     def dynamic_viscosity(self):
         """Compute the dynamic viscosity 'mu' for given geometric height 'h'"""
 
         T = self.temperature
-        return Constant.beta_s*T**(3.0/2)/(T + Constant.S)
+        return CONST.beta_s*T**(3.0/2)/(T + CONST.S)
 
     @property
     def kinematic_viscosity(self):

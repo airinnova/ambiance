@@ -3,6 +3,15 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[*.*.*] -- 2019-08-03
+---------------------
+
+Changed
+~~~~~~~
+
+* Renamed the class `ambiance.Constant` to `ambiance._Const`/`ambiance.CONST`
+    * Clearer indication that this class is meant to be "private"/constant
+
 [0.2.1] -- 2019-08-03
 ---------------------
 
