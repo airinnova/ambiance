@@ -298,9 +298,7 @@ class Atmosphere:
         """
         Get layer specific data for given geopotential height 'H'
 
-        For internal use. Not intended to be called by the user.
-
-        Return:
+        Returns:
             :(H_b, T_b, beta): (tuple) layer specific data
         """
 
@@ -320,6 +318,26 @@ class Atmosphere:
             p_b += pos_in_layer*layers[i]['p']
 
         return (H_b, T_b, beta, p_b)
+
+    @property
+    def layer_names(self):
+        """Get layer names"""
+
+        str_len = 20
+        layer_names = np.char.chararray(self.H.shape, itemsize=str_len)
+        layer_names[:] = ''
+
+        layers = CONST.LAYER_DICT
+
+        for i in layers.keys():
+            pos_in_layer = (self.layer_nums == i).astype(int)
+
+            this_layer = np.char.chararray(self.H.shape, itemsize=str_len)
+            this_layer[:] = str(layers[i]['name'])
+            this_layer_filtered = np.char.multiply(this_layer, pos_in_layer)
+            layer_names = np.char.add(layer_names, this_layer_filtered)
+
+        return layer_names
 
     @staticmethod
     def geom2geop_height(h):
