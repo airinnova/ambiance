@@ -269,22 +269,22 @@ def test_layer_names():
     eps = 1e-6
 
     # Single value input
-    assert Atmosphere(H2h(-3e3)).layer_names[0] == 'troposphere'
-    assert Atmosphere(H2h(0)).layer_names[0] == 'troposphere'
+    assert Atmosphere(H2h(-3e3)).layer_name[0] == 'troposphere'
+    assert Atmosphere(H2h(0)).layer_name[0] == 'troposphere'
 
-    assert Atmosphere(H2h(11e3 + eps)).layer_names[0] == 'tropopause'
-    assert Atmosphere(H2h(15e3)).layer_names[0] == 'tropopause'
+    assert Atmosphere(H2h(11e3 + eps)).layer_name[0] == 'tropopause'
+    assert Atmosphere(H2h(15e3)).layer_name[0] == 'tropopause'
 
-    assert Atmosphere(H2h(20e3 + eps)).layer_names[0] == 'stratosphere'
-    assert Atmosphere(H2h(25e3)).layer_names[0] == 'stratosphere'
-    assert Atmosphere(H2h(32e3)).layer_names[0] == 'stratosphere'
+    assert Atmosphere(H2h(20e3 + eps)).layer_name[0] == 'stratosphere'
+    assert Atmosphere(H2h(25e3)).layer_name[0] == 'stratosphere'
+    assert Atmosphere(H2h(32e3)).layer_name[0] == 'stratosphere'
 
-    assert Atmosphere(H2h(47e3 + eps)).layer_names[0] == 'stratopause'
-    assert Atmosphere(H2h(50e3)).layer_names[0] == 'stratopause'
+    assert Atmosphere(H2h(47e3 + eps)).layer_name[0] == 'stratopause'
+    assert Atmosphere(H2h(50e3)).layer_name[0] == 'stratopause'
 
-    assert Atmosphere(H2h(51e3 + eps)).layer_names[0] == 'mesosphere'
-    assert Atmosphere(H2h(75e3)).layer_names[0] == 'mesosphere'
-    assert Atmosphere(H2h(80e3)).layer_names[0] == 'mesosphere'
+    assert Atmosphere(H2h(51e3 + eps)).layer_name[0] == 'mesosphere'
+    assert Atmosphere(H2h(75e3)).layer_name[0] == 'mesosphere'
+    assert Atmosphere(H2h(80e3)).layer_name[0] == 'mesosphere'
 
     # Test matrix
     h = np.array([[0, 12, 22],
@@ -292,7 +292,7 @@ def test_layer_names():
     expected = np.char.array([['troposphere', 'tropopause', 'stratosphere'],
                              ['stratosphere', 'stratopause', 'mesosphere']])
 
-    computed = Atmosphere(h).layer_names
+    computed = Atmosphere(h).layer_name
     assert np.testing.assert_array_equal(computed, expected) is None
 
 

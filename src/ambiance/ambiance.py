@@ -322,12 +322,12 @@ class Atmosphere:
         return (H_b, T_b, beta, p_b)
 
     @property
-    def layer_names(self):
+    def layer_name(self):
         """Get layer names as strings"""
 
         str_len = CONST.MAX_STR_LEN_LAYER_NAME
-        layer_names = np.char.chararray(self.H.shape, itemsize=str_len, unicode=True)
-        layer_names[:] = ''
+        layer_name = np.char.chararray(self.H.shape, itemsize=str_len, unicode=True)
+        layer_name[:] = ''
 
         for i, layer_dict in CONST.LAYER_DICTS.items():
             this_layer = np.char.chararray(self.H.shape, itemsize=str_len, unicode=True)
@@ -336,9 +336,9 @@ class Atmosphere:
             pos_in_layer = (self.layer_nums == i).astype(int)
             this_layer_filtered = np.char.multiply(this_layer, pos_in_layer)
 
-            layer_names = np.char.add(layer_names, this_layer_filtered)
+            layer_name = np.char.add(layer_name, this_layer_filtered)
 
-        return layer_names
+        return layer_name
 
     @staticmethod
     def geom2geop_height(h):
