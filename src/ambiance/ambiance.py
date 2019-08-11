@@ -326,11 +326,11 @@ class Atmosphere:
         """Get layer names as strings"""
 
         str_len = CONST.MAX_STR_LEN_LAYER_NAME
-        layer_names = np.char.chararray(self.H.shape, itemsize=str_len)
+        layer_names = np.char.chararray(self.H.shape, itemsize=str_len, unicode=True)
         layer_names[:] = ''
 
         for i, layer_dict in CONST.LAYER_DICTS.items():
-            this_layer = np.char.chararray(self.H.shape, itemsize=str_len)
+            this_layer = np.char.chararray(self.H.shape, itemsize=str_len, unicode=True)
             this_layer[:] = layer_dict['name']
 
             pos_in_layer = (self.layer_nums == i).astype(int)

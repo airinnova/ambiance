@@ -259,6 +259,43 @@ def test_data_types():
             assert computed == approx(value, 1e-3)
 
 
+def test_layer_names():
+    """
+    Test layer names
+    """
+
+    # Converter (layer boundaries are defined based on geopotential height)
+    H2h = Atmosphere.geop2geom_height
+    eps = 1e-6
+
+    # Single value input
+    assert Atmosphere(H2h(-3e3)).layer_names[0] == 'troposphere'
+    assert Atmosphere(H2h(0)).layer_names[0] == 'troposphere'
+
+    assert Atmosphere(H2h(11e3 + eps)).layer_names[0] == 'tropopause'
+    assert Atmosphere(H2h(15e3)).layer_names[0] == 'tropopause'
+
+    assert Atmosphere(H2h(20e3 + eps)).layer_names[0] == 'stratosphere'
+    assert Atmosphere(H2h(25e3)).layer_names[0] == 'stratosphere'
+    assert Atmosphere(H2h(32e3)).layer_names[0] == 'stratosphere'
+
+    assert Atmosphere(H2h(47e3 + eps)).layer_names[0] == 'stratopause'
+    assert Atmosphere(H2h(50e3)).layer_names[0] == 'stratopause'
+
+    assert Atmosphere(H2h(51e3 + eps)).layer_names[0] == 'mesosphere'
+    assert Atmosphere(H2h(75e3)).layer_names[0] == 'mesosphere'
+    assert Atmosphere(H2h(80e3)).layer_names[0] == 'mesosphere'
+
+    # Test matrix
+    h = np.array([[0, 12, 22],
+                 [30, 49, 75]])*1e3
+    expected = np.char.array([['troposphere', 'tropopause', 'stratosphere'],
+                             ['stratosphere', 'stratopause', 'mesosphere']])
+
+    computed = Atmosphere(h).layer_names
+    assert np.testing.assert_array_equal(computed, expected) is None
+
+
 def test_kelvin_celsius_conversion():
     """
     Test conversion between temperature in degrees Celsius and Kelvin
