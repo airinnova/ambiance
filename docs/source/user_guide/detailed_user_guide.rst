@@ -68,6 +68,7 @@ Computing atmospheric properties
 * Dynamic viscosity (`dynamic_viscosity`)
 * Gravitational acceleration (`grav_accel`)
 * Kinematic viscosity (`kinematic_viscosity`)
+* Layer names (`layer_name`) [string array]
 * Mean free path (`mean_free_path`)
 * Mean particle speed (`mean_particle_speed`)
 * Number density (`number_density`)
@@ -77,6 +78,25 @@ Computing atmospheric properties
 * Speed of sound (`speed_of_sound`)
 * Temperature (`temperature`, `temperature_in_celsius`)
 * Thermal conductivity (`thermal_conductivity`)
+
+**Layer names**
+
+`Atmosphere` also provides a special attribute called `layer_name` which returns the layer name(s) corresponding to the input height(s). Example:
+
+.. code:: python
+
+    >>> Atmosphere(0).layer_name
+    array(['troposphere'], dtype='<U31')
+
+    >>> Atmosphere([[30000, 80000], [-5000, 22000]]).layer_name
+    array([['stratosphere', 'mesosphere'],
+           ['troposphere', 'stratosphere']], dtype='<U53')
+
+The attribute `layer_name` returns a *Numpy* string array which can be further manipulated in many ways.
+
+.. seealso::
+
+    **Numpy string operations:** https://docs.scipy.org/doc/numpy/reference/routines.char.html
 
 Input data
 ----------
@@ -132,10 +152,12 @@ Geometric and geopotential height
 
 Convert from a *geometric* to a *geopotential* height.
 
->>> Atmosphere.geom2geop_height(10000)
-9984.293438772525
+.. code:: python
 
-Convert from a *geopotential* to a *geometric* height.
+    >>> Atmosphere.geom2geop_height(10000)
+    9984.293438772525
 
->>> Atmosphere.geop2geom_height(9984.293438772525)
-10000.0
+    Convert from a *geopotential* to a *geometric* height.
+
+    >>> Atmosphere.geop2geom_height(9984.293438772525)
+    10000.0

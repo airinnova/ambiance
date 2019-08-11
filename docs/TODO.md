@@ -1,17 +1,23 @@
 ## TODO
 
-* Testing
-    * Add test cases for matrices >2D
+### Testing
 
-* Features
-    * Return name of layer
-        * >>> Atmosphere(0).layer_name --> 'Troposphere'
-        * Add test cases!
-    * Converters (--> separate class?)
-        * bar to MPa
+* Add test cases for arrays >2D
 
-* Change
-    * Rename 't2T' to 'celsius2kelvin' and vice versa
+### Documentation
 
-* Optimising
-    * Try to avoid multiple calls of '_get_layer_params'
+* Add table for layer names
+* Add formulas
+
+### API change
+
+* Rename 't2T' to 'celsius2kelvin' and vice versa
+
+### Improve
+
+* Try to avoid multiple calls of '_get_layer_params'
+
+### Functionality
+
+* Put converters into separate class?
+    * bar to MPa

@@ -55,6 +55,7 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
 * Dynamic viscosity (`dynamic_viscosity`)
 * Gravitational acceleration (`grav_accel`)
 * Kinematic viscosity (`kinematic_viscosity`)
+* Layer names (`layer_name`) [string array]
 * Mean free path (`mean_free_path`)
 * Mean particle speed (`mean_particle_speed`)
 * Number density (`number_density`)
@@ -115,6 +116,9 @@ Similarly, you can also pass in entire *matrices*. Example:
     array([[340.29398803, 295.15359145, 295.06949351],
            [295.06949351, 295.70270856, 308.29949587],
            [340.29398803, 282.53793156, 329.798731  ]])
+
+    >>> Atmosphere([30000, 0]).layer_name
+    array(['stratosphere', 'troposphere'], dtype='<U42')
 
 For all functionality see the `complete documentation <https://ambiance.readthedocs.io/en/latest/>`_.
 

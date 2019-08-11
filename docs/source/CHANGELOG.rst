@@ -3,8 +3,13 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
-[*.*.*] -- 2019-08-03
+[0.3.0] -- 2019-08-03
 ---------------------
+
+Added
+~~~~~
+
+* Added `Atmosphere.layer_name` which returns a string array with layer names corresponding to the input heights
 
 Changed
 ~~~~~~~

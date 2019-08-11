@@ -87,7 +87,7 @@ class _Const:
         :H_max: Upper boundary of acceptable geopotential heights [m]
 
         :LAYER_SPEC_PROP: Table containing layer specific properties
-        :LAYER_DICT: Dictionary containing layer specific properties
+        :LAYER_DICTS: Dictionary containing layer specific properties
 
     Notes on 'LAYER_SPEC_PROP':
          * Table with columns
@@ -129,11 +129,11 @@ class _Const:
     H_min = -5_000
     H_max = 80_000
 
-    _LAYER_NAME_a = 'Troposphere'
-    _LAYER_NAME_b = 'Tropopause'
-    _LAYER_NAME_c = 'Stratosphere'
-    _LAYER_NAME_d = 'Stratopause'
-    _LAYER_NAME_e = 'Mesosphere'
+    _LAYER_NAME_a = 'troposphere'
+    _LAYER_NAME_b = 'tropopause'
+    _LAYER_NAME_c = 'stratosphere'
+    _LAYER_NAME_d = 'stratopause'
+    _LAYER_NAME_e = 'mesosphere'
 
     LAYER_SPEC_PROP = [
         [-5.0e3, 320.65, -6.5e-3, 1.77687e+5, _LAYER_NAME_a],
@@ -151,13 +151,14 @@ class _Const:
     LAYER_NUM_FIRST = 1
     LAYER_NUM_LAST = len(LAYER_SPEC_PROP) - 1
 
-    LAYER_DICT = {}
+    LAYER_DICTS = {}
+    MAX_STR_LEN_LAYER_NAME = 0
     for i, layer_pair in enumerate(pairwise(LAYER_SPEC_PROP), start=LAYER_NUM_FIRST):
         # Layer properties from the base layer are valid from base to top
         H_base, T, beta, p, layer_name = layer_pair[0]
         H_top, _, _, _, _ = layer_pair[1]
 
-        LAYER_DICT[i] = {
+        LAYER_DICTS[i] = {
                 "H_base": H_base,
                 "H_top": H_top,
                 "T": T,
@@ -165,6 +166,9 @@ class _Const:
                 "p": p,
                 "name": layer_name,
                 }
+
+        if len(layer_name) > MAX_STR_LEN_LAYER_NAME:
+            MAX_STR_LEN_LAYER_NAME = len(layer_name)
 
 
 CONST = _Const
@@ -277,7 +281,7 @@ class Atmosphere:
         Return array of same shape as 'self.H' with corresponding layer numbers
         """
 
-        layers = CONST.LAYER_DICT
+        layers = CONST.LAYER_DICTS
         layer_nums = np.zeros_like(self.H)
 
         for i in layers.keys():
@@ -298,9 +302,7 @@ class Atmosphere:
         """
         Get layer specific data for given geopotential height 'H'
 
-        For internal use. Not intended to be called by the user.
-
-        Return:
+        Returns:
             :(H_b, T_b, beta): (tuple) layer specific data
         """
 
@@ -309,17 +311,34 @@ class Atmosphere:
         beta = np.zeros_like(self.H)
         p_b = np.zeros_like(self.H)
 
-        layers = CONST.LAYER_DICT
-
-        for i in layers.keys():
+        for i, layer_dict in CONST.LAYER_DICTS.items():
             pos_in_layer = (self.layer_nums == i).astype(int)
 
-            H_b += pos_in_layer*layers[i]['H_base']
-            T_b += pos_in_layer*layers[i]['T']
-            beta += pos_in_layer*layers[i]['beta']
-            p_b += pos_in_layer*layers[i]['p']
+            H_b += pos_in_layer*layer_dict['H_base']
+            T_b += pos_in_layer*layer_dict['T']
+            beta += pos_in_layer*layer_dict['beta']
+            p_b += pos_in_layer*layer_dict['p']
 
         return (H_b, T_b, beta, p_b)
+
+    @property
+    def layer_name(self):
+        """Get layer names as strings"""
+
+        str_len = CONST.MAX_STR_LEN_LAYER_NAME
+        layer_name = np.char.chararray(self.H.shape, itemsize=str_len, unicode=True)
+        layer_name[:] = ''
+
+        for i, layer_dict in CONST.LAYER_DICTS.items():
+            this_layer = np.char.chararray(self.H.shape, itemsize=str_len, unicode=True)
+            this_layer[:] = layer_dict['name']
+
+            pos_in_layer = (self.layer_nums == i).astype(int)
+            this_layer_filtered = np.char.multiply(this_layer, pos_in_layer)
+
+            layer_name = np.char.add(layer_name, this_layer_filtered)
+
+        return layer_name
 
     @staticmethod
     def geom2geop_height(h):
