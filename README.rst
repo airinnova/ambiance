@@ -50,21 +50,21 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
 
 **List of available atmospheric properties**
 
-* Collision frequency (`collision_frequency`)
-* Density (`density`)
-* Dynamic viscosity (`dynamic_viscosity`)
-* Gravitational acceleration (`grav_accel`)
-* Kinematic viscosity (`kinematic_viscosity`)
-* Layer names (`layer_name`) [string array]
-* Mean free path (`mean_free_path`)
-* Mean particle speed (`mean_particle_speed`)
-* Number density (`number_density`)
-* Pressure (`pressure`)
-* Pressure scale height (`pressure_scale_height`)
-* Specific weight (`specific_weight`)
-* Speed of sound (`speed_of_sound`)
-* Temperature (`temperature`, `temperature_in_celsius`)
-* Thermal conductivity (`thermal_conductivity`)
+* Collision frequency (``collision_frequency``)
+* Density (``density``)
+* Dynamic viscosity (``dynamic_viscosity``)
+* Gravitational acceleration (``grav_accel``)
+* Kinematic viscosity (``kinematic_viscosity``)
+* Layer names (``layer_name``) [string array]
+* Mean free path (``mean_free_path``)
+* Mean particle speed (``mean_particle_speed``)
+* Number density (``number_density``)
+* Pressure (``pressure``)
+* Pressure scale height (``pressure_scale_height``)
+* Specific weight (``specific_weight``)
+* Speed of sound (``speed_of_sound``)
+* Temperature (``temperature``, ``temperature_in_celsius``)
+* Thermal conductivity (``thermal_conductivity``)
 
 **List-like input**
 
