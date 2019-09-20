@@ -24,17 +24,16 @@ Compute atmospheric properties for heights ranging from -5 km to 80 km.
 
 The implementation is based on the ICAO standard atmosphere from 1993:
 
-    | [1] International Civil Aviation Organization
-    |     Manual Of The ICAO Standard Atmosphere -- 3rd Edition 1993 (Doc 7488)
-    |     -- extended to 80 kilometres (262 500 feet)
-    |     https://store.icao.int/manual-of-the-icao-standard-atmosphere-extended
-    |     -to-80-kilometres-262-500-feet-doc-7488-quadrilingual-printed.html
+.. [ICAO93] International Civil Aviation Organization ; Manual Of The ICAO
+            Standard Atmosphere -- 3rd Edition 1993 (Doc 7488) -- extended
+            to 80 kilometres (262 500 feet)
+            https://store.icao.int/manual-of-the-icao-standard-atmosphere-extended-to-80-kilometres-262-500-feet-doc-7488-quadrilingual-printed.html
 
 Other references:
 
-    | [2] Wikipedia, International Standard Atmosphere,
-    |     https://en.wikipedia.org/wiki/International_Standard_Atmosphere
-    |     Accessed: 2019-07-28
+.. [WISA19] Wikipedia ; International Standard Atmosphere ;
+             https://en.wikipedia.org/wiki/International_Standard_Atmosphere
+             Accessed: 2019-07-28
 """
 
 from itertools import tee
@@ -56,7 +55,7 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-class _Const:
+class Const:
     """
     Constants defined in the ICAO standard atmosphere (1993)
 
@@ -91,14 +90,14 @@ class _Const:
 
     Notes on 'LAYER_SPEC_PROP':
          * Table with columns
-               * (1) :H_b: geopotential base height [m]
-               * (2) :T_b: base temperature [K]
-               * (3) :beta: base temperature gradient [kg/(m*s*K^(1/2))]
-               * (4) :p: base pressure [Pa]
-               * (5) :layer name: string representation of layer name
-         * Values for (1,2,3) from table D in [1]
-         * Values for (4) for pressure from [1]
-         * Values for (5) from [2]
+               1. :H_b: geopotential base height [m]
+               2. :T_b: base temperature [K]
+               3. :beta: base temperature gradient [kg/(m*s*K^(1/2))]
+               4. :p: base pressure [Pa]
+               5. :layer name: string representation of layer name
+         * Values for (1,2,3) from table D in [ICAO93]_
+         * Values for (4) for pressure from [ICAO93]_
+         * Values for (5) from [WISA19]_
     """
 
     # Primary constants (table A)
@@ -159,19 +158,19 @@ class _Const:
         H_top, _, _, _, _ = layer_pair[1]
 
         LAYER_DICTS[i] = {
-                "H_base": H_base,
-                "H_top": H_top,
-                "T": T,
-                "beta": beta,
-                "p": p,
-                "name": layer_name,
-                }
+            "H_base": H_base,
+            "H_top": H_top,
+            "T": T,
+            "beta": beta,
+            "p": p,
+            "name": layer_name,
+        }
 
         if len(layer_name) > MAX_STR_LEN_LAYER_NAME:
             MAX_STR_LEN_LAYER_NAME = len(layer_name)
 
 
-CONST = _Const
+CONST = Const
 
 
 class Atmosphere:
@@ -194,7 +193,7 @@ class Atmosphere:
         >>> Atmosphere(-6e3)
         Traceback (most recent call last):
             ...
-        ValueError: ('Value out of bounds.', 'Lower limit: -5004 m, ', 'Upper limit: 81020 m')
+        ValueError: Value out of bounds. Lower limit: -5004 m. Upper limit: 81020 m.
 
     Create an atmosphere object with given support points (heights in metre):
 
@@ -271,10 +270,10 @@ class Atmosphere:
         # Check that input height is in correct range
         if (self.h < CONST.h_min).any() or (self.h > CONST.h_max).any():
             raise ValueError(
-                    'Value out of bounds.',
-                    f'Lower limit: {CONST.h_min:.0f} m, ',
-                    f'Upper limit: {CONST.h_max:.0f} m'
-                    )
+                'Value out of bounds.' +
+                f' Lower limit: {CONST.h_min:.0f} m.' +
+                f' Upper limit: {CONST.h_max:.0f} m.'
+            )
 
     def _get_layer_nums(self):
         """

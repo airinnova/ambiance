@@ -1,4 +1,4 @@
-User Guide
+User guide
 ==========
 
 Creating an Atmosphere object

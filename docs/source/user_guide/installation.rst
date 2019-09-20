@@ -1,8 +1,5 @@
-Installation and requirements
-=============================
-
 Installation
-------------
+============
 
 **Installation via PyPI (recommended)**
 
@@ -19,7 +16,5 @@ Installation
     * https://pip.pypa.io/en/stable/quickstart/
 
 Requirements
-------------
-
-* *Python 3.6* or higher
-* `Numpy`_ (will be automatically installed when you install |name| from `PyPI`_)
+    * *Python 3.6* or higher
+    * `Numpy`_ (will be automatically installed when you install |name| from `PyPI`_)
