@@ -7,21 +7,21 @@
     :alt: Documentation Status
 
 .. image:: https://img.shields.io/badge/license-Apache%202-blue.svg
-    :target: https://github.com/aarondettmann/ambiance/blob/master/LICENSE.txt
+    :target: https://github.com/airinnova/ambiance/blob/master/LICENSE.txt
     :alt: License
 
-.. image:: https://travis-ci.org/aarondettmann/ambiance.svg?branch=master
-    :target: https://travis-ci.org/aarondettmann/ambiance
+.. image:: https://travis-ci.org/airinnova/ambiance.svg?branch=master
+    :target: https://travis-ci.org/airinnova/ambiance
     :alt: Build status
 
-.. image:: https://codecov.io/gh/aarondettmann/ambiance/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/aarondettmann/ambiance
+.. image:: https://codecov.io/gh/airinnova/ambiance/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/airinnova/ambiance
     :alt: Coverage
 
 |
 
-.. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/docs/source/_static/images/logo/logo.png
-   :target: https://github.com/aarondettmann/ambiance/
+.. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/docs/source/_static/images/logo/logo.png
+   :target: https://github.com/airinnova/ambiance/
    :alt: Ambiance
 
 *Ambiance* is a full implementation of the ICAO standard atmosphere 1993 written in Python.
@@ -89,7 +89,7 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
 
 The output is
 
-.. image:: https://raw.githubusercontent.com/aarondettmann/ambiance/master/tests/temperature_plot.png
+.. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/temperature_plot.png
    :alt: Temperature plot
 
 **Matrix-like input**

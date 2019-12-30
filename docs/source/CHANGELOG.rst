@@ -3,6 +3,12 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[0.3.1] -- 2019-12-30
+---------------------
+
+* Transfer of repository ownership
+* Repository moved from ``aarondettmann/ambiance`` to ``airinnova/ambiance``
+
 [0.3.0] -- 2019-08-03
 ---------------------
 

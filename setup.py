@@ -13,7 +13,7 @@ VERSION = __version__
 AUTHOR = 'Aaron Dettmann'
 EMAIL = 'dettmann@kth.se'
 DESCRIPTION = 'A full implementation of the ICAO standard atmosphere 1993'
-URL = 'https://github.com/aarondettmann/ambiance/'
+URL = 'https://github.com/airinnova/ambiance/'
 REQUIRES_PYTHON = '>=3.6.0'
 REQUIRED = ['numpy']
 README = 'README.rst'
