@@ -4,7 +4,7 @@
 # ======================================================================
 # AMBIANCE -- A full implementation of the ICAO standard atmosphere 1993
 #
-#  Copyright 2019 Aaron Dettmann
+#  Copyright 2019-2020 Aaron Dettmann
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
