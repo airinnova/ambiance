@@ -32,8 +32,8 @@ The implementation is based on the ICAO standard atmosphere from 1993:
 Other references:
 
 .. [WISA19] Wikipedia ; International Standard Atmosphere ;
-             https://en.wikipedia.org/wiki/International_Standard_Atmosphere
-             Accessed: 2019-07-28
+            https://en.wikipedia.org/wiki/International_Standard_Atmosphere
+            Accessed: 2019-07-28
 """
 
 from itertools import tee
@@ -247,9 +247,7 @@ class Atmosphere:
         return self._layer_nums
 
     def _parse_height(self):
-        """
-        Check and return correct representation of geometric height 'h'
-        """
+        """Check and return correct representation of geometric height 'h'"""
 
         # Number-like or array-like input is accepted
         if isinstance(self.h, (int, float, list, tuple)):
@@ -276,9 +274,7 @@ class Atmosphere:
             )
 
     def _get_layer_nums(self):
-        """
-        Return array of same shape as 'self.H' with corresponding layer numbers
-        """
+        """Return array of same shape as 'self.H' with corresponding layer numbers"""
 
         layers = CONST.LAYER_DICTS
         layer_nums = np.zeros_like(self.H)
@@ -342,51 +338,44 @@ class Atmosphere:
     @staticmethod
     def geom2geop_height(h):
         """Convert geometric height 'h' to geopotential height 'H'"""
-
         h = np.asarray(h)
         return CONST.r*h/(CONST.r + h)
 
     @staticmethod
     def geop2geom_height(H):
         """Convert geopotential height 'H' to geometric height 'h'"""
-
         H = np.asarray(H)
         return CONST.r*H/(CONST.r - H)
 
     @staticmethod
     def t2T(t):
         """Convert from temperature 't' in degree Celsius to 'T' in Kelvin"""
-
         return CONST.T_i + np.asarray(t)
 
     @staticmethod
     def T2t(T):
         """Convert from temperature 'T' in Kelvin to 't' in degree Celsius"""
-
         return np.asarray(T) - CONST.T_i
 
     @property
     def grav_accel(self):
-        """Compute gravitational acceleration 'g' for given geometric height 'h'"""
-
+        """Gravitational acceleration 'g'"""
         return CONST.g_0*(CONST.r/(CONST.r + self.h))**2
 
     @property
     def temperature(self):
-        """Compute the air temperature :T: for given geometric height 'h'"""
-
+        """Air temperature 'T'"""
         H_b, T_b, beta, _ = self._get_layer_params()
         return T_b + beta*(self.H - H_b)
 
     @property
     def temperature_in_celsius(self):
-        """Compute the air temperature 'T' in Celsius for given geometric height 'h'"""
-
+        """Air temperature 'T' in Celsius"""
         return self.T2t(self.temperature)
 
     @property
     def pressure(self):
-        """Compute the air pressure 'p' for given geometric height 'h'"""
+        """Air pressure 'p'"""
 
         H_b, T_b, beta, p_b = self._get_layer_params()
 
@@ -404,7 +393,7 @@ class Atmosphere:
         pressure = pressure + pressue_beta_zero*beta_zero
 
         # Pressure if beta != 0
-        exponent = np.divide(1, beta, out=np.zeros_like(beta), where=beta!=0)
+        exponent = np.divide(1, beta, out=np.zeros_like(beta), where=beta != 0)
         pressue_beta_nozero = p_b*(1 + (beta/T_b)*(self.H - H_b))**(exponent*(-CONST.g_0/CONST.R))
         pressure = pressure + pressue_beta_nozero*beta_nonzero
 
@@ -412,81 +401,60 @@ class Atmosphere:
 
     @property
     def density(self):
-        """Compute the air density 'rho' for given geometric height 'h'"""
-
-        p = self.pressure
-        T = self.temperature
-        return p/(CONST.R*T)
+        """Air density 'rho'"""
+        return self.pressure/(CONST.R*self.temperature)
 
     @property
     def specific_weight(self):
-        """Compute the specific weight 'gamma' for given geometric height 'h'"""
-
+        """Specific weight 'gamma'"""
         return self.density*self.grav_accel
 
     @property
     def pressure_scale_height(self):
-        """Compute the pressure scale height 'H_p' for given geometric height 'h'"""
-
-        T = self.temperature
-        g = self.grav_accel
-        return CONST.R*T/g
+        """Pressure scale height 'H_p'"""
+        return CONST.R*self.temperature/self.grav_accel
 
     @property
     def number_density(self):
-        """Compute the number density :n: for given geometric height 'h'"""
-
-        p = self.pressure
-        T = self.temperature
-        return CONST.N_A*p/(CONST.R_star*T)
+        """Number density 'n'"""
+        return CONST.N_A*self.pressure/(CONST.R_star*self.temperature)
 
     @property
     def mean_particle_speed(self):
-        """Compute the mean particle speed :nu_bar: for given geometric height 'h'"""
-
+        """Mean particle speed 'nu_bar'"""
         T = self.temperature
         return np.sqrt((8/np.pi)*CONST.R*T)
 
     @property
     def mean_free_path(self):
-        """Compute the mean free path :l: for given geometric height 'h'"""
-
-        n = self.number_density
-        return 1/(np.sqrt(2)*np.pi*CONST.sigma**2*n)
+        """Mean free path 'l'"""
+        return 1/(np.sqrt(2)*np.pi*CONST.sigma**2*self.number_density)
 
     @property
     def collision_frequency(self):
-        """Compute the collision frequency 'omega' for given geometric height 'h'"""
-
-        p = self.pressure
-        T = self.temperature
-        return 4*CONST.sigma**2*CONST.N_A*(np.sqrt(np.pi/(CONST.R_star*CONST.M_0)))*(p/np.sqrt(T))
+        """Collision frequency 'omega'"""
+        return 4*CONST.sigma**2*CONST.N_A * \
+            (np.sqrt(np.pi/(CONST.R_star*CONST.M_0))) * \
+            (self.pressure/np.sqrt(self.temperature))
 
     @property
     def speed_of_sound(self):
-        """Compute the speed of sound 'a' for given geometric height 'h'"""
-
-        T = self.temperature
-        return np.sqrt(CONST.kappa*CONST.R*T)
+        """Speed of sound 'a'"""
+        return np.sqrt(CONST.kappa*CONST.R*self.temperature)
 
     @property
     def dynamic_viscosity(self):
-        """Compute the dynamic viscosity 'mu' for given geometric height 'h'"""
-
+        """Viscosity 'mu'"""
         T = self.temperature
-        return CONST.beta_s*T**(3.0/2)/(T + CONST.S)
+        return CONST.beta_s*T**1.5/(T + CONST.S)
 
     @property
     def kinematic_viscosity(self):
-        """Compute the kinematic viscosity 'nu' for given geometric height 'h'"""
-
-        mu = self.dynamic_viscosity
-        rho = self.density
-        return mu/rho
+        """Kinematic viscosity 'nu'"""
+        return self.dynamic_viscosity/self.density
 
     @property
     def thermal_conductivity(self):
-        """Compute the thermal conductivity 'lambda' for given geometric height 'h'"""
-
+        """Thermal conductivity 'lambda'"""
         T = self.temperature
-        return 2.648151e-3*T**(3/2)/(T + (245.4*10**(-12/T)))
+        return 2.648151e-3*T**1.5/(T + (245.4*10**(-12/T)))
