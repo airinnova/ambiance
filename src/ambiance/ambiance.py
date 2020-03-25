@@ -221,10 +221,10 @@ class Atmosphere:
         self._layer_nums = self._get_layer_nums()
 
     def __str__(self):
-        return f'{self.__class__.__qualname__}({list(self.h)})'
+        return f'{self.__class__.__qualname__}({self.h!r})'
 
     def __repr__(self):
-        return f'{self.__class__.__qualname__}({list(self.h)})'
+        return f'{self.__class__.__qualname__}({self.h!r})'
 
     def __hash__(self):
         return hash(tuple(self.h))
