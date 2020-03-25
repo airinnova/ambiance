@@ -15,22 +15,27 @@ from table_data import table_data
 
 
 def test_version():
-
     from ambiance.__version__ import __version__
-
     print(__version__)
 
 
 def test_repr():
-
     assert repr(Atmosphere(0)) == 'Atmosphere([0.0])'
     assert repr(Atmosphere([1, 100, 1000])) == 'Atmosphere([1.0, 100.0, 1000.0])'
 
 
 def test_str():
-
     assert str(Atmosphere(0)) == 'Atmosphere([0.0])'
     assert str(Atmosphere([1, 100, 1000])) == 'Atmosphere([1.0, 100.0, 1000.0])'
+
+
+def test_hash():
+    assert isinstance(hash(Atmosphere(0)), int)
+    a1 = Atmosphere(0)
+    a2 = Atmosphere([1e0, 1e1, 1e2, 1e3, 1e4])
+    d = {a1: 'sealevel', a2: 'range'}
+    assert d[a1] == 'sealevel'
+    assert d[a2] == 'range'
 
 
 def test_invalid_inputs():
@@ -42,17 +47,17 @@ def test_invalid_inputs():
         Atmosphere()
 
     type_errors = [
-            None,
-            dict,
-            str,
-            ]
+        None,
+        dict,
+        str,
+    ]
 
     value_errors = [
-            [],
-            (),
-            [[]],
-            [1, [2, 3]]
-            ]
+        [],
+        (),
+        [[]],
+        [1, [2, 3]]
+    ]
 
     for invalid_input in type_errors:
         with pytest.raises(TypeError):
@@ -80,13 +85,13 @@ def test_out_of_bounds_error():
             pytest.fail(f"ValueError for height {boundary_height} m...")
 
     invalid_inputs = [
-            min_height-1,
-            max_height+1,
-            [1, 2, 3, min_height-1],
-            [1, 2, 3, min_height-1, 50],
-            [1, 2, 3, max_height+1],
-            [1, 2, 3, max_height+1, 50],
-            ]
+        min_height-1,
+        max_height+1,
+        [1, 2, 3, min_height-1],
+        [1, 2, 3, min_height-1, 50],
+        [1, 2, 3, max_height+1],
+        [1, 2, 3, max_height+1, 50],
+    ]
 
     for invalid_input in invalid_inputs:
         with pytest.raises(ValueError):
@@ -219,12 +224,12 @@ def test_data_types():
     entry = table_data.property_dict[height]
 
     h_types = [
-            int(height),
-            float(height),
-            [int(height)],
-            np.array(height, dtype=int),
-            np.array(height, dtype=float),
-            ]
+        int(height),
+        float(height),
+        [int(height)],
+        np.array(height, dtype=int),
+        np.array(height, dtype=float),
+    ]
 
     for h in h_types:
         print(repr(h))
@@ -244,13 +249,13 @@ def test_data_types():
             exp_values[prop_name].append(entry[prop_name])
 
     h_types = [
-            list(int(height) for height in heights),
-            tuple(int(height) for height in heights),
-            list(float(height) for height in heights),
-            tuple(float(height) for height in heights),
-            np.array(heights, dtype=int),
-            np.array(heights, dtype=float),
-            ]
+        list(int(height) for height in heights),
+        tuple(int(height) for height in heights),
+        list(float(height) for height in heights),
+        tuple(float(height) for height in heights),
+        np.array(heights, dtype=int),
+        np.array(heights, dtype=float),
+    ]
 
     for h in h_types:
         print(repr(h))
@@ -333,11 +338,11 @@ def test_geom_geop_height_conversion():
 
     # Test different inputs
     inputs = [
-            np.arange(-5e3, 80e3, 1e3),
-            (-5e3, 80e3, 1e3),
-            [-5e3, 80e3, 1e3],
-            -5000,
-            ]
+        np.arange(-5e3, 80e3, 1e3),
+        (-5e3, 80e3, 1e3),
+        [-5e3, 80e3, 1e3],
+        -5000,
+    ]
 
     for in_data in inputs:
         geom_height_in = np.arange(-5e3, 80e3, 1e3)

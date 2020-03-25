@@ -144,7 +144,7 @@ class Const:
         [51.0e3, 270.65, -2.8e-3, 6.69384e+1, _LAYER_NAME_e],
         [71.0e3, 214.65, -2.0e-3, 3.95639e+0, _LAYER_NAME_e],
         [80.0e3, 196.65, -2.0e-3, 8.86272e-1, _LAYER_NAME_e],
-        ]
+    ]
 
     # Number of first and last layer in atmosphere
     LAYER_NUM_FIRST = 1
@@ -221,10 +221,13 @@ class Atmosphere:
         self._layer_nums = self._get_layer_nums()
 
     def __str__(self):
-        return f'{self.__class__.__name__}({list(self.h)})'
+        return f'{self.__class__.__qualname__}({list(self.h)})'
 
     def __repr__(self):
-        return f'{self.__class__.__name__}({list(self.h)})'
+        return f'{self.__class__.__qualname__}({list(self.h)})'
+
+    def __hash__(self):
+        return hash(tuple(self.h))
 
     @property
     def h(self):
