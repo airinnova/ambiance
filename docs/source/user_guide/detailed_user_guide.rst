@@ -4,7 +4,7 @@ User guide
 Creating an Atmosphere object
 -----------------------------
 
-|name| provides a class called `Atmosphere` from which atmospheric properties can be derived. An instance of `Atmosphere` can be created with the altitudes at which atmospheric properties are to be evaluated.
+|name| provides a class called ``Atmosphere`` from which atmospheric properties can be derived. An instance of ``Atmosphere`` can be created with the altitudes at which atmospheric properties are to be evaluated.
 
 **Example** If you wanted to know some properties at, say, *0 m*, *1000 m* and *10000 m*, all you need to do is to call `Atmosphere` with these altitudes.
 
@@ -25,11 +25,11 @@ Creating an Atmosphere object
     .. code:: python
 
         >>> atmosphere.h  # Geometric height
-        [    0.  1000. 10000.]
+        array([    0.,  1000., 10000.])
         >>> atmosphere.H  # Geopotential height
-        [   0.          999.84271205 9984.29343877]
+        array([   0.        ,  999.84271205, 9984.29343877])
 
-    The `Atmosphere` class does only take *geometric* heights as input as this is the typical use. However, if you really wanted to request properties based on the *geopotential* height, you can convert the geopotential height to geometric height, and then call `Atmosphere`.
+    The ``Atmosphere`` class does only take *geometric* heights as input as this is the typical use. However, if you really wanted to request properties based on the *geopotential* height, you can convert the geopotential height to geometric height, and then call `Atmosphere`.
 
     .. code:: python
 
@@ -45,21 +45,21 @@ Creating an Atmosphere object
 Computing atmospheric properties
 --------------------------------
 
-`Atmosphere` provides attributes with atmospheric properties of interest. For instance, *pressure*, *gravitational acceleration* and *speed of sound* can be retrieved with:
+``Atmosphere`` provides attributes with atmospheric properties of interest. For instance, *pressure*, *gravitational acceleration* and *speed of sound* can be retrieved with:
 
 .. code:: python
 
     >>> atmosphere.pressure
-    array([101325.        ,  89876.27760234,  26499.8731228 ])
+    array([101325.        ,  89874.56291622,  26436.24259269])
     >>> atmosphere.grav_accel
-    array([9.80665   , 9.80356531, 9.77586844])
+    array([9.80665   , 9.80356482, 9.77582006])
     >>> atmosphere.speed_of_sound
-    array([340.29398803, 336.4345821 , 299.53166026])
+    array([340.29398803, 336.43397149, 299.46316487])
 
 
 .. hint::
 
-    All properties will be returned in `SI units`_ (or SI derived units). In the above example, pressure is given in *[newton/ meter²]*, gravitational acceleration in *[meter/second²]* and speed of sound in *[meter/second]*.
+    All properties will be returned in `SI units`_ (or SI derived units). In the above example, pressure is given in *[Newton/meter²]*, gravitational acceleration in *[meter/second²]* and speed of sound in *[meter/second]*.
 
 **List of available atmospheric properties**
 
@@ -81,7 +81,7 @@ Computing atmospheric properties
 
 **Layer names**
 
-`Atmosphere` also provides a special attribute called `layer_name` which returns the layer name(s) corresponding to the input height(s). Example:
+``Atmosphere`` also provides a special attribute called ``layer_name`` which returns the layer name(s) corresponding to the input height(s). Example:
 
 .. code:: python
 
@@ -92,7 +92,7 @@ Computing atmospheric properties
     array([['stratosphere', 'mesosphere'],
            ['troposphere', 'stratosphere']], dtype='<U53')
 
-The attribute `layer_name` returns a *Numpy* string array which can be further manipulated in many ways.
+The attribute ``layer_name`` returns a *Numpy* string array which can be further manipulated in many ways.
 
 .. seealso::
 
@@ -101,7 +101,7 @@ The attribute `layer_name` returns a *Numpy* string array which can be further m
 Input data
 ----------
 
-The height data passed to `Atmosphere` can be a single value (integers, floats), a vector (list, tuple, *Numpy* vector) or a matrix (iterable of an iterable, *Numpy* matrix). The heights do not have to be ordered in any specific way.
+The height data passed to ``Atmosphere`` can be a single value (integer, float), a vector (list, tuple, *Numpy* vector) or a matrix (iterable of an iterable, *Numpy* matrix). The heights do not have to be ordered in any specific way.
 
 .. code:: python
 
@@ -115,6 +115,7 @@ The height data passed to `Atmosphere` can be a single value (integers, floats),
 
     >>> # ===== Matrix input =====
     >>> Atmosphere([3000, 12000, 36000]).grav_accel
+    array([9.79740029, 9.76972952, 9.69651134])
     >>> Atmosphere([[3000, 12000], [0, -3000]]).grav_accel
     array([[9.79740029, 9.76972952],
            [9.80665   , 9.81591282]])

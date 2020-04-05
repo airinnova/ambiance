@@ -3,13 +3,29 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[1.0.0] -- 2020-04-05
+---------------------
+
+Added
+~~~~~
+
+* Update documentation
+* Add Latex equations for all atmospheric properties (rendered with Sphinx)
+* Add *doctest* for all user documentation (``*.rst`` files)
+
 [0.3.3] -- 2020-03-25
 ---------------------
+
+Added
+~~~~~
 
 * Make `Atmosphere()` hashable
 
 [0.3.2] -- 2020-03-14
 ---------------------
+
+Remove
+~~~~~~
 
 * Remove unnecessary aliases of atmospheric properties when deriving new ones
 
