@@ -25,6 +25,7 @@ Introduction
 
    user_guide/installation
    user_guide/detailed_user_guide
+   user_guide/extending
    user_guide/references
 
 .. toctree::
