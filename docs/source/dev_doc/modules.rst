@@ -1,3 +1,6 @@
+ambiance
+========
+
 .. toctree::
    :maxdepth: 4
 

@@ -39,9 +39,7 @@ def test_hash():
 
 
 def test_invalid_inputs():
-    """
-    Do not allow strange input
-    """
+    """Do not allow strange input"""
 
     with pytest.raises(TypeError):
         Atmosphere()
@@ -69,9 +67,7 @@ def test_invalid_inputs():
 
 
 def test_out_of_bounds_error():
-    """
-    Assert that errors are raised when height is too low or too high
-    """
+    """Assert that errors are raised when height is too low or too high"""
 
     # Minimal and maximal heights
     min_height = CONST.h_min
@@ -99,9 +95,7 @@ def test_out_of_bounds_error():
 
 
 def test_sealevel():
-    """
-    Test sealevel conditions
-    """
+    """Test sealevel conditions"""
 
     sealevel = Atmosphere(0)
 
@@ -131,9 +125,7 @@ def test_sealevel():
 
 
 def test_table_data_single_value_input():
-    """
-    Test that data corresponds to tabularised data from "Doc 7488/3"
-    """
+    """Test that data corresponds to tabularised data from 'Doc 7488/3'"""
 
     for h, entry in table_data.property_dict.items():
         print("="*80)
@@ -146,9 +138,7 @@ def test_table_data_single_value_input():
 
 
 def test_table_data_vector_input():
-    """
-    Test that vector can be passed as input (instead of single values)
-    """
+    """Test that vector can be passed as input (instead of single values)"""
 
     # "Sorted" vectors
     heights, properties = table_data.get_vectors()
@@ -171,9 +161,7 @@ def test_table_data_vector_input():
 
 
 def test_table_data_matrix_input():
-    """
-    Test that matrix can be passed as input (instead of single values)
-    """
+    """Test that matrix can be passed as input (instead of single values)"""
 
     # "Sorted" matrices
     heights, properties = table_data.get_matrices()
@@ -265,9 +253,7 @@ def test_data_types():
 
 
 def test_layer_names():
-    """
-    Test layer names
-    """
+    """Test layer names"""
 
     # Converter (layer boundaries are defined based on geopotential height)
     H2h = Atmosphere.geop2geom_height
@@ -302,9 +288,7 @@ def test_layer_names():
 
 
 def test_kelvin_celsius_conversion():
-    """
-    Test conversion between temperature in degrees Celsius and Kelvin
-    """
+    """Test conversion between temperature in degrees Celsius and Kelvin"""
 
     # See: https://www.wolframalpha.com/input/?i=-30.00%C2%B0C+in+Kelvin
     # See: https://www.wolframalpha.com/input/?i=236.00%C2%B0C+in+Kelvin
@@ -332,9 +316,7 @@ def test_kelvin_celsius_conversion():
 
 
 def test_geom_geop_height_conversion():
-    """
-    Test conversion between geometric and geopotential height
-    """
+    """Test conversion between geometric and geopotential height"""
 
     # Test different inputs
     inputs = [
@@ -351,6 +333,23 @@ def test_geom_geop_height_conversion():
         geom_height_out = Atmosphere.geop2geom_height(geop_height_out)
 
         assert np.testing.assert_allclose(geom_height_out, geom_height_in) is None
+
+
+def test_subclassing():
+    """Basic subclassing test"""
+
+    class MyExtendedAtmosphere(Atmosphere):
+        @property
+        def new_property(self):
+            pos_lower = (self.h < 1000).astype(int)
+            pos_upper = 1 - pos_lower
+            spec_humidity = pos_lower*222  # if h < 0
+            spec_humidity = spec_humidity + pos_upper*np.sin(self.h)  # if h >= 0
+            return spec_humidity
+
+    exp = np.array([222., 222., 222., 0.9300395, -0.99984019])
+    comp = MyExtendedAtmosphere([0, 500, 900, 2000, 50e3]).new_property
+    assert np.testing.assert_allclose(comp, exp) is None
 
 
 if __name__ == '__main__':

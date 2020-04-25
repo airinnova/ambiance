@@ -76,7 +76,7 @@ You may of course define functions with additional arguments. In this case we om
 
     >>> from ambiance import Atmosphere
     >>> import numpy as np
-    >>>
+
     >>> class MyExtendedAtmosphere(Atmosphere):
     ...     def specific_humidity(self, model=1):
     ...         if model == 1:
@@ -84,6 +84,7 @@ You may of course define functions with additional arguments. In this case we om
     ...         else:
     ...             return np.log10(self.h)
     ...
+
     >>> atmos = MyExtendedAtmosphere([1, 10, 100])
     >>> atmos.specific_humidity()
     array([  2.,  20., 200.])
