@@ -352,5 +352,22 @@ def test_subclassing():
     assert np.testing.assert_allclose(comp, exp) is None
 
 
+def test_from_pressure():
+    """Test instantiation of Atmosphere with 'from_pressure()' method"""
+
+    # Test for some values in allowed range
+    # --- Scalar input ---
+    for h_exp in np.arange(CONST.h_min, CONST.h_max, 171.3):
+        p = Atmosphere(h_exp).pressure
+        h_comp = Atmosphere.from_pressure(float(p)).h
+        assert h_exp == approx(h_comp)
+
+    with pytest.raises(AssertionError):
+        Atmosphere.from_pressure([1e5, 1e4])
+
+    with pytest.raises(AssertionError):
+        Atmosphere.from_pressure(-15.6)
+
+
 if __name__ == '__main__':
     main()

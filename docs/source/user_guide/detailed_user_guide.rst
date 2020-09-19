@@ -122,6 +122,25 @@ The height data passed to ``Atmosphere`` can be a single value (integer, float),
     array([[9.79740029, 9.76972952],
            [9.80665   , 9.81591282]])
 
+Instantiating from given pressure
+---------------------------------
+
+An ``Atmosphere`` object can also be instantiated from a given ambient pressure. To do so you can use the ``Atmosphere.from_pressure()`` method. It takes a pressure in :math:`Pa = N/m^2` as input. Currently only single values are accepted as input. The method uses `bisection <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.bisect.html>`_ to find the approximate atmospheric altitude and returns a new atmosphere object.
+
+.. code:: python
+
+    >>> atmos = Atmosphere.from_pressure(101325)  # Pressure at sea level
+
+    >>> # Geometric altitude
+    >>> atmos.h
+    array([-0.00216999])
+
+    >>> # Temperature
+    >>> atmos.temperature
+    array([288.1500141])
+
+The method uses the default tolerance settings from ``scipy.optimize.bisect()`` when determining the altitude.
+
 Converting units
 ----------------
 

@@ -15,7 +15,10 @@ EMAIL = 'dettmann@kth.se'
 DESCRIPTION = 'A full implementation of the ICAO standard atmosphere 1993'
 URL = 'https://github.com/airinnova/ambiance/'
 REQUIRES_PYTHON = '>=3.6.0'
-REQUIRED = ['numpy']
+REQUIRED = [
+    'numpy',
+    'scipy',
+]
 README = 'README.rst'
 PACKAGE_DIR = 'src/'
 LICENSE = 'Apache License 2.0'

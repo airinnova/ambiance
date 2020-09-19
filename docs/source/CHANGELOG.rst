@@ -3,6 +3,16 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[1.0.1] -- 2020-09-19
+---------------------
+
+Added
+~~~~~
+
+* Add classmethod to instantiate an atmosphere from given pressure
+    - Suggestion from: https://github.com/airinnova/ambiance/issues/4
+    - Only scalar inputs are supported
+
 [1.0.0] -- 2020-04-05
 ---------------------
 

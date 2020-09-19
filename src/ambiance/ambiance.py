@@ -39,6 +39,7 @@ Other references:
 from itertools import tee
 
 import numpy as np
+import scipy.optimize as opt
 
 
 def pairwise(iterable):
@@ -249,6 +250,22 @@ class Atmosphere:
         """Array of same shape as 'self.H' with layer numbers (int)"""
         return self._layer_nums
 
+    @classmethod
+    def from_pressure(cls, p):
+        """
+        Return a new instance for given pressure value
+
+        Note: Currently only scalar input accepted (int, float).
+        """
+
+        assert isinstance(p, (int, float)) and p > 0
+
+        def f(ht):
+            return p - cls(ht).pressure
+
+        h = opt.bisect(f, CONST.h_min, CONST.h_max)
+        return cls(h)
+
     def _parse_height(self):
         """Check and return correct representation of geometric height 'h'"""
 
@@ -260,7 +277,7 @@ class Atmosphere:
                 self._h = self.h[None]  # Make 1D array
 
         elif not isinstance(self.h, np.ndarray):
-            raise TypeError('Input data type not accepted')
+            raise TypeError("Input data type not accepted")
 
         if self.h.size == 0:
             raise ValueError("Input array is empty")
