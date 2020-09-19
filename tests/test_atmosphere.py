@@ -355,18 +355,33 @@ def test_subclassing():
 def test_from_pressure():
     """Test instantiation of Atmosphere with 'from_pressure()' method"""
 
-    # Test for some values in allowed range
+    with pytest.raises(ValueError):
+        Atmosphere.from_pressure(-15.6)
+
+    with pytest.raises(ValueError):
+        Atmosphere.from_pressure([1e5, 0])
+
     # --- Scalar input ---
-    for h_exp in np.arange(CONST.h_min, CONST.h_max, 171.3):
+    for h_exp in np.arange(CONST.h_min+1000, CONST.h_max, 171.3):
         p = Atmosphere(h_exp).pressure
-        h_comp = Atmosphere.from_pressure(float(p)).h
+        h_comp = Atmosphere.from_pressure(p).h
         assert h_exp == approx(h_comp)
 
-    with pytest.raises(AssertionError):
-        Atmosphere.from_pressure([1e5, 1e4])
+    # --- Vector input ---
+    h_exp = [0, -2000, 1e3, 30e3, -50, 71938]
+    p = Atmosphere(h_exp).pressure
+    h_comp = Atmosphere.from_pressure(p).h
+    assert np.testing.assert_allclose(h_exp, h_comp) is None
 
-    with pytest.raises(AssertionError):
-        Atmosphere.from_pressure(-15.6)
+    # --- Matrix input ---
+    h_exp = np.array([
+        [0, -2000, 1e3],
+        [30e3, -50, 71938],
+        [888, 444, 9999.33],
+    ])
+    p = Atmosphere(h_exp).pressure
+    h_comp = Atmosphere.from_pressure(p).h
+    assert np.testing.assert_allclose(h_exp, h_comp) is None
 
 
 if __name__ == '__main__':

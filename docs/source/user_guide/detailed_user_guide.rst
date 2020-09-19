@@ -125,21 +125,28 @@ The height data passed to ``Atmosphere`` can be a single value (integer, float),
 Instantiating from given pressure
 ---------------------------------
 
-An ``Atmosphere`` object can also be instantiated from a given ambient pressure. To do so you can use the ``Atmosphere.from_pressure()`` method. It takes a pressure in :math:`Pa = N/m^2` as input. Currently only single values are accepted as input. The method uses `bisection <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.bisect.html>`_ to find the approximate atmospheric altitude and returns a new atmosphere object.
+An ``Atmosphere`` object can also be instantiated from given ambient pressure. To do so you can use the ``Atmosphere.from_pressure()`` method. This method takes pressure values in :math:`Pa = N/m^2` as input. Scalar, vector- and matrix-like input is accepted. ``Atmosphere.from_pressure()`` returns a new atmosphere instance which let's you easily check other atmospheric properties too, like temperature.
 
 .. code:: python
 
-    >>> atmos = Atmosphere.from_pressure(101325)  # Pressure at sea level
+    # Pressure at sea level
+    >>> atmos = Atmosphere.from_pressure(101325)
 
     >>> # Geometric altitude
     >>> atmos.h
-    array([-0.00216999])
+    array([0.])
 
     >>> # Temperature
     >>> atmos.temperature
-    array([288.1500141])
+    array([288.15])
 
-The method uses the default tolerance settings from ``scipy.optimize.bisect()`` when determining the altitude.
+    >>> # You can also pass in multiple pressure values at once...
+    >>> atmos = Atmosphere.from_pressure([1e5, 1e4, 1e3, 1e2, 1e1, 1e0])
+    >>> atmos.h
+    array([  110.88636257, 16220.98996248, 31207.06116863, 48182.51841281,
+           65617.3058236 , 80304.40565541])
+
+``Atmosphere.from_pressure()`` uses SciPy's `newton method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.newton.html>`_ is used to find approximate atmospheric altitudes. The method uses the default tolerance settings from ``scipy.optimize.newton()`` when determining the altitude. The initial guess for the altitude is 0 for all pressure values.
 
 Converting units
 ----------------

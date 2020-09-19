@@ -252,18 +252,18 @@ class Atmosphere:
 
     @classmethod
     def from_pressure(cls, p):
-        """
-        Return a new instance for given pressure value
+        """Return a new instance for given pressure value(s)"""
 
-        Note: Currently only scalar input accepted (int, float).
-        """
+        # TODO: similar instance checks as in _parse_height?
 
-        assert isinstance(p, (int, float)) and p > 0
+        p = np.asarray(p)
+        if (p < 0.89).any() or (p > 1.7e5).any():
+            raise ValueError("Value out of bounds. Lower limit: 0.89 Pa. Upper limit: 1.7e5 Pa.")
 
         def f(ht):
             return p - cls(ht).pressure
 
-        h = opt.bisect(f, CONST.h_min, CONST.h_max)
+        h = opt.newton(f, np.zeros_like(p))
         return cls(h)
 
     def _parse_height(self):
@@ -288,9 +288,9 @@ class Atmosphere:
         # Check that input height is in correct range
         if (self.h < CONST.h_min).any() or (self.h > CONST.h_max).any():
             raise ValueError(
-                'Value out of bounds.' +
-                f' Lower limit: {CONST.h_min:.0f} m.' +
-                f' Upper limit: {CONST.h_max:.0f} m.'
+                "Value out of bounds." +
+                f" Lower limit: {CONST.h_min:.0f} m." +
+                f" Upper limit: {CONST.h_max:.0f} m."
             )
 
     def _get_layer_nums(self):
