@@ -355,14 +355,28 @@ def test_subclassing():
 def test_from_pressure():
     """Test instantiation of Atmosphere with 'from_pressure()' method"""
 
-    with pytest.raises(ValueError):
-        Atmosphere.from_pressure(-15.6)
+    value_errors = [
+        -15.6,
+        (),
+        [[]],
+        [1, [2, 3]],
+        [1e5, 0],
+        CONST.p_min*0.9,
+        CONST.p_max*1.1,
+    ]
 
-    with pytest.raises(ValueError):
-        Atmosphere.from_pressure([1e5, 0])
+    for value_error in value_errors:
+        with pytest.raises(ValueError):
+            Atmosphere.from_pressure(value_error)
 
     # --- Scalar input ---
-    for h_exp in np.arange(CONST.h_min+1000, CONST.h_max, 171.3):
+    for h_exp in np.arange(CONST.h_min, CONST.h_max, 171.3):
+        p = Atmosphere(h_exp).pressure
+        h_comp = Atmosphere.from_pressure(p).h
+        assert h_exp == approx(h_comp)
+
+    # Test boundaries
+    for h_exp in [CONST.h_min, CONST.h_max]:
         p = Atmosphere(h_exp).pressure
         h_comp = Atmosphere.from_pressure(p).h
         assert h_exp == approx(h_comp)

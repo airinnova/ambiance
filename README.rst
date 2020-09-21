@@ -27,7 +27,8 @@
 *Ambiance* is a full implementation of the ICAO standard atmosphere 1993 written in Python.
 
 * `International Standard Atmosphere (Wikipedia) <https://en.wikipedia.org/wiki/International_Standard_Atmosphere>`_
-* `Manual Of The ICAO Standard Atmosphere - 3rd Edition 1993 (Doc 7488) <https://store.icao.int/manual-of-the-icao-standard-atmosphere-extended-to-80-kilometres-262-500-feet-doc-7488-quadrilingual-printed.html>`_
+* International Civil Aviation Organization ; Manual Of The ICAO Standard Atmosphere -- 3rd Edition 1993 (Doc 7488) -- extended to 80 kilometres (262 500 feet)
+
 
 Usage
 =====
