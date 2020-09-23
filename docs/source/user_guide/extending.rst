@@ -20,7 +20,7 @@ The atmosphere class can be easily extended with custom atmospheric properties. 
     >>> atmos.specific_humidity
     array([  0.,   2., 200.])
 
-In the example above, an additional atmospheric property (``specific_humidity``) was added. Note that by adding the decorator ``@property``, we do not need to call the function using parentheses. The example shows a dummy function which multiplies the altitude by a factor of two, but you can replace the expression with any function you like. The variable ``self.h`` is the *geometric* altitude (``self.H`` is the geopotential altitude, see also :ref:`sec_user_guide`).
+In the example above, an additional atmospheric property (``specific_humidity``) is added. By adding the decorator ``@property``, we do not need to call the function using parentheses. The example shows a dummy function which simply multiplies the altitude by a factor of two, but you can replace the expression with any function you like. The variable ``self.h`` is the *geometric* altitude (``self.H`` is the geopotential altitude, see also :ref:`sec_user_guide`).
 
 .. hint::
 

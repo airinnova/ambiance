@@ -17,4 +17,7 @@ Installation
 
 Requirements
     * *Python 3.6* or higher
-    * `Numpy`_ (will be automatically installed when you install |name| from `PyPI`_)
+    * `NumPy`_ [#pp]_
+    * `SciPy`_ [#pp]_
+
+.. [#pp] Will be automatically installed when you install |name| from `PyPI`_.

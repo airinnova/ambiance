@@ -3,7 +3,7 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
-[1.0.3] -- 2020-09-21
+[1.1.0] -- 2020-09-23
 ---------------------
 
 Changed

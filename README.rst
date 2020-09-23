@@ -138,7 +138,8 @@ Requirements
 Using *Ambiance* requires
 
 * *Python 3.6* or higher
-* *Numpy*
+* *NumPy*
+* *SciPy*
 
 *For developers*: Recommended packages may be installed with the `requirements.txt`.
 

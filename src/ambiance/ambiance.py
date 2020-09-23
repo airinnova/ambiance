@@ -41,7 +41,7 @@ from itertools import tee
 import numpy as np
 import scipy.optimize as opt
 
-eps = 1e-9
+EPS = 1e-9
 
 
 def pairwise(iterable):
@@ -134,8 +134,8 @@ class Const:
     H_max = 80_000
 
     # Pressure limits (computed)
-    p_min = 0.886216717024069 - eps
-    p_max = 177837.4089432764 + eps
+    p_min = 0.886216717024069
+    p_max = 177837.4089432764
 
     _LAYER_NAME_a = 'troposphere'
     _LAYER_NAME_b = 'tropopause'
@@ -186,9 +186,9 @@ class Atmosphere:
     """
     Representation of the ICAO standard atmosphere (1993)
 
-    * All input and output is using the basic SI-units
-    * Input for computation of atmospheric properties is generally the GEOMETRIC (actual) height
-    * Either a single value or a height range can be given as input
+    * All input and output is using SI units
+    * The main constructor takes the geometric (actual) height as input
+    * Single values, vectors or matrices are accepted as input
 
     Usage:
 
@@ -228,7 +228,7 @@ class Atmosphere:
         """Return a new instance from given geometric height(s)"""
 
         self.h = self._make_tensor(h)
-        if check_bounds and ((self.h < CONST.h_min-eps).any() or (self.h > CONST.h_max+eps).any()):
+        if check_bounds and ((self.h < CONST.h_min-EPS).any() or (self.h > CONST.h_max+EPS).any()):
             raise ValueError(
                 "Value out of bounds." +
                 f" Lower limit: {CONST.h_min:.0f} m." +
@@ -243,7 +243,7 @@ class Atmosphere:
         """Return a new instance for given pressure value(s)"""
 
         p = cls._make_tensor(p)
-        if (p < CONST.p_min).any() or (p > CONST.p_max).any():
+        if (p < CONST.p_min-EPS).any() or (p > CONST.p_max+EPS).any():
             raise ValueError(
                 "Value out of bounds." +
                 f" Lower limit: {CONST.p_min:.1f} Pa." +
@@ -251,8 +251,9 @@ class Atmosphere:
             )
 
         def f(ht):
-            # Allow Newton method to 'overshoot', do not check bounds
-            return p - cls(ht, check_bounds=False).pressure
+            # * Use log() for faster convergence in Newton method
+            # * Allow Newton method to 'overshoot', do not check bounds
+            return np.log(p/cls(ht, check_bounds=False).pressure)
 
         h = opt.newton(f, np.zeros_like(p))
         return cls(h)
@@ -303,6 +304,44 @@ class Atmosphere:
         # Always work with float
         return t.astype(dtype=float)
 
+    @staticmethod
+    def geom2geop_height(h):
+        """
+        Convert geometric height :math:`h` to geopotential height :math:`H`
+
+        :math:`H = \\frac{r h}{r + h}`
+        """
+        h = np.asarray(h)
+        return CONST.r*h/(CONST.r + h)
+
+    @staticmethod
+    def geop2geom_height(H):
+        """
+        Convert geopotential height :math:`H` to geometric height :math:`h`
+
+        :math:`h = \\frac{r H}{r - H}`
+        """
+        H = np.asarray(H)
+        return CONST.r*H/(CONST.r - H)
+
+    @staticmethod
+    def t2T(t):
+        """
+        Convert from temperature :math:`t` in degree Celsius to :math:`T` in Kelvin
+
+        :math:`T = t + T_i`
+        """
+        return CONST.T_i + np.asarray(t)
+
+    @staticmethod
+    def T2t(T):
+        """
+        Convert from temperature :math:`T` in Kelvin to :math:`t` in degree Celsius
+
+        :math:`t = T - T_i`
+        """
+        return np.asarray(T) - CONST.T_i
+
     def _get_layer_nums(self):
         """Return array of same shape as 'self.H' with corresponding layer numbers"""
 
@@ -313,11 +352,11 @@ class Atmosphere:
             pos_in_layer = (self.H >= layers[i]['H_base']) & (self.H < layers[i]['H_top'])
             layer_nums += pos_in_layer.astype(int)*i
 
-        # Special case: geopotential height <-5000
+        # Special case: geopotential height < -5000
         pos_in_layer = (self.H < CONST.H_min).astype(int)
         layer_nums += pos_in_layer*CONST.LAYER_NUM_FIRST
 
-        # Special case: geopotential height>80000
+        # Special case: geopotential height > 80000
         pos_in_layer = (self.H >= CONST.H_max).astype(int)
         layer_nums += pos_in_layer*CONST.LAYER_NUM_LAST
 
@@ -364,44 +403,6 @@ class Atmosphere:
             layer_name = np.char.add(layer_name, this_layer_filtered)
 
         return layer_name
-
-    @staticmethod
-    def geom2geop_height(h):
-        """
-        Convert geometric height :math:`h` to geopotential height :math:`H`
-
-        :math:`H = \\frac{r h}{r + h}`
-        """
-        h = np.asarray(h)
-        return CONST.r*h/(CONST.r + h)
-
-    @staticmethod
-    def geop2geom_height(H):
-        """
-        Convert geopotential height :math:`H` to geometric height :math:`h`
-
-        :math:`h = \\frac{r H}{r - H}`
-        """
-        H = np.asarray(H)
-        return CONST.r*H/(CONST.r - H)
-
-    @staticmethod
-    def t2T(t):
-        """
-        Convert from temperature :math:`t` in degree Celsius to :math:`T` in Kelvin
-
-        :math:`T = t + T_i`
-        """
-        return CONST.T_i + np.asarray(t)
-
-    @staticmethod
-    def T2t(T):
-        """
-        Convert from temperature :math:`T` in Kelvin to :math:`t` in degree Celsius
-
-        :math:`t = T - T_i`
-        """
-        return np.asarray(T) - CONST.T_i
 
     @property
     def grav_accel(self):
