@@ -24,12 +24,12 @@ Compute atmospheric properties for heights ranging from -5 km to 80 km.
 
 The implementation is based on the ICAO standard atmosphere from 1993:
 
+References:
+===========
+
 .. [ICAO93] International Civil Aviation Organization ; Manual Of The ICAO
             Standard Atmosphere -- 3rd Edition 1993 (Doc 7488) -- extended
             to 80 kilometres (262 500 feet)
-            https://store.icao.int/manual-of-the-icao-standard-atmosphere-extended-to-80-kilometres-262-500-feet-doc-7488-quadrilingual-printed.html
-
-Other references:
 
 .. [WISA19] Wikipedia ; International Standard Atmosphere ;
             https://en.wikipedia.org/wiki/International_Standard_Atmosphere
@@ -40,6 +40,8 @@ from itertools import tee
 
 import numpy as np
 import scipy.optimize as opt
+
+EPS = 1e-9
 
 
 def pairwise(iterable):
@@ -85,6 +87,8 @@ class Const:
         :h_max: Upper boundary of acceptable geometric heights [m]
         :H_min: Lower boundary of acceptable geopotential heights [m]
         :H_max: Upper boundary of acceptable geopotential heights [m]
+        :p_min: Lower boundary of acceptable pressures [Pa]
+        :p_max: Upper boundary of acceptable pressures [Pa]
 
         :LAYER_SPEC_PROP: Table containing layer specific properties
         :LAYER_DICTS: Dictionary containing layer specific properties
@@ -129,6 +133,10 @@ class Const:
     H_min = -5_000
     H_max = 80_000
 
+    # Pressure limits (computed)
+    p_min = 0.886216717024069
+    p_max = 177837.4089432764
+
     _LAYER_NAME_a = 'troposphere'
     _LAYER_NAME_b = 'tropopause'
     _LAYER_NAME_c = 'stratosphere'
@@ -159,12 +167,12 @@ class Const:
         H_top, _, _, _, _ = layer_pair[1]
 
         LAYER_DICTS[i] = {
-            "H_base": H_base,
-            "H_top": H_top,
-            "T": T,
-            "beta": beta,
-            "p": p,
-            "name": layer_name,
+            'H_base': H_base,
+            'H_top': H_top,
+            'T': T,
+            'beta': beta,
+            'p': p,
+            'name': layer_name,
         }
 
         if len(layer_name) > MAX_STR_LEN_LAYER_NAME:
@@ -178,9 +186,9 @@ class Atmosphere:
     """
     Representation of the ICAO standard atmosphere (1993)
 
-    * All input and output is using the basic SI-units
-    * Input for computation of atmospheric properties is generally the GEOMETRIC (actual) height
-    * Either a single value or a height range can be given as input
+    * All input and output is using SI units
+    * The main constructor takes the geometric (actual) height as input
+    * Single values, vectors or matrices are accepted as input
 
     Usage:
 
@@ -216,10 +224,39 @@ class Atmosphere:
                5.74591263e+02, 1.05246447e+00])
     """
 
-    def __init__(self, h):
-        self.h = h
+    def __init__(self, h, check_bounds=True):
+        """Return a new instance from given geometric height(s)"""
+
+        self.h = self._make_tensor(h)
+        if check_bounds and ((self.h < CONST.h_min-EPS).any() or (self.h > CONST.h_max+EPS).any()):
+            raise ValueError(
+                "Value out of bounds." +
+                f" Lower limit: {CONST.h_min:.0f} m." +
+                f" Upper limit: {CONST.h_max:.0f} m."
+            )
+
         self._H = self.geom2geop_height(self.h)
         self._layer_nums = self._get_layer_nums()
+
+    @classmethod
+    def from_pressure(cls, p):
+        """Return a new instance for given pressure value(s)"""
+
+        p = cls._make_tensor(p)
+        if (p < CONST.p_min-EPS).any() or (p > CONST.p_max+EPS).any():
+            raise ValueError(
+                "Value out of bounds." +
+                f" Lower limit: {CONST.p_min:.1f} Pa." +
+                f" Upper limit: {CONST.p_max:.1f} Pa."
+            )
+
+        def f(ht):
+            # * Use log() for faster convergence in Newton method
+            # * Allow Newton method to 'overshoot', do not check bounds
+            return np.log(p/cls(ht, check_bounds=False).pressure)
+
+        h = opt.newton(f, np.zeros_like(p))
+        return cls(h)
 
     def __str__(self):
         return f'{self.__class__.__qualname__}({self.h!r})'
@@ -238,7 +275,6 @@ class Atmosphere:
     @h.setter
     def h(self, h):
         self._h = h
-        self._parse_height()
 
     @property
     def H(self):
@@ -250,48 +286,61 @@ class Atmosphere:
         """Array of same shape as 'self.H' with layer numbers (int)"""
         return self._layer_nums
 
-    @classmethod
-    def from_pressure(cls, p):
-        """Return a new instance for given pressure value(s)"""
-
-        # TODO: similar instance checks as in _parse_height?
-
-        p = np.asarray(p)
-        if (p < 0.89).any() or (p > 1.7e5).any():
-            raise ValueError("Value out of bounds. Lower limit: 0.89 Pa. Upper limit: 1.7e5 Pa.")
-
-        def f(ht):
-            return p - cls(ht).pressure
-
-        h = opt.newton(f, np.zeros_like(p))
-        return cls(h)
-
-    def _parse_height(self):
-        """Check and return correct representation of geometric height 'h'"""
+    @staticmethod
+    def _make_tensor(t):
+        """Return a 'tensor object' from given user input"""
 
         # Number-like or array-like input is accepted
-        if isinstance(self.h, (int, float, list, tuple)):
-            self._h = np.asarray(self.h, dtype=float)
-
-            if self.h.ndim == 0:
-                self._h = self.h[None]  # Make 1D array
-
-        elif not isinstance(self.h, np.ndarray):
+        if isinstance(t, (int, float, list, tuple)):
+            t = np.asarray(t, dtype=float)
+            if t.ndim == 0:
+                t = t[None]  # Make 1D array
+        elif not isinstance(t, np.ndarray):
             raise TypeError("Input data type not accepted")
 
-        if self.h.size == 0:
+        if t.size == 0:
             raise ValueError("Input array is empty")
 
         # Always work with float
-        self._h = self._h.astype(dtype=float)
+        return t.astype(dtype=float)
 
-        # Check that input height is in correct range
-        if (self.h < CONST.h_min).any() or (self.h > CONST.h_max).any():
-            raise ValueError(
-                "Value out of bounds." +
-                f" Lower limit: {CONST.h_min:.0f} m." +
-                f" Upper limit: {CONST.h_max:.0f} m."
-            )
+    @staticmethod
+    def geom2geop_height(h):
+        """
+        Convert geometric height :math:`h` to geopotential height :math:`H`
+
+        :math:`H = \\frac{r h}{r + h}`
+        """
+        h = np.asarray(h)
+        return CONST.r*h/(CONST.r + h)
+
+    @staticmethod
+    def geop2geom_height(H):
+        """
+        Convert geopotential height :math:`H` to geometric height :math:`h`
+
+        :math:`h = \\frac{r H}{r - H}`
+        """
+        H = np.asarray(H)
+        return CONST.r*H/(CONST.r - H)
+
+    @staticmethod
+    def t2T(t):
+        """
+        Convert from temperature :math:`t` in degree Celsius to :math:`T` in Kelvin
+
+        :math:`T = t + T_i`
+        """
+        return CONST.T_i + np.asarray(t)
+
+    @staticmethod
+    def T2t(T):
+        """
+        Convert from temperature :math:`T` in Kelvin to :math:`t` in degree Celsius
+
+        :math:`t = T - T_i`
+        """
+        return np.asarray(T) - CONST.T_i
 
     def _get_layer_nums(self):
         """Return array of same shape as 'self.H' with corresponding layer numbers"""
@@ -303,11 +352,11 @@ class Atmosphere:
             pos_in_layer = (self.H >= layers[i]['H_base']) & (self.H < layers[i]['H_top'])
             layer_nums += pos_in_layer.astype(int)*i
 
-        # Special case: geopotential height <-5000
+        # Special case: geopotential height < -5000
         pos_in_layer = (self.H < CONST.H_min).astype(int)
         layer_nums += pos_in_layer*CONST.LAYER_NUM_FIRST
 
-        # Special case: geopotential height>80000
+        # Special case: geopotential height > 80000
         pos_in_layer = (self.H >= CONST.H_max).astype(int)
         layer_nums += pos_in_layer*CONST.LAYER_NUM_LAST
 
@@ -355,44 +404,6 @@ class Atmosphere:
 
         return layer_name
 
-    @staticmethod
-    def geom2geop_height(h):
-        """
-        Convert geometric height :math:`h` to geopotential height :math:`H`
-
-        :math:`H = \\frac{r h}{r + h}`
-        """
-        h = np.asarray(h)
-        return CONST.r*h/(CONST.r + h)
-
-    @staticmethod
-    def geop2geom_height(H):
-        """
-        Convert geopotential height :math:`H` to geometric height :math:`h`
-
-        :math:`h = \\frac{r H}{r - H}`
-        """
-        H = np.asarray(H)
-        return CONST.r*H/(CONST.r - H)
-
-    @staticmethod
-    def t2T(t):
-        """
-        Convert from temperature :math:`t` in degree Celsius to :math:`T` in Kelvin
-
-        :math:`T = t + T_i`
-        """
-        return CONST.T_i + np.asarray(t)
-
-    @staticmethod
-    def T2t(T):
-        """
-        Convert from temperature :math:`T` in Kelvin to :math:`t` in degree Celsius
-
-        :math:`t = T - T_i`
-        """
-        return np.asarray(T) - CONST.T_i
-
     @property
     def grav_accel(self):
         """
@@ -427,10 +438,10 @@ class Atmosphere:
         Air pressure :math:`p`
 
         :math:`p = p_b \\exp \\left[ - \\frac{g_0}{R T} (H - H_b) \\right]
-        \quad \\text{for} \quad \\beta = 0`
+        \\quad \\text{for} \\quad \\beta = 0`
 
         :math:`p = p_b \\left[ 1 + \\frac{\\beta}{T_b} (H - H_b) \\right]^{-g_0
-        \\beta / R} \quad \\text{for} \quad \\beta \\neq 0`
+        \\beta / R} \\quad \\text{for} \\quad \\beta \\neq 0`
         """
         H_b, T_b, beta, p_b = self._get_layer_params()
 
@@ -553,7 +564,7 @@ class Atmosphere:
         """
         Thermal conductivity :math:`\\lambda`
 
-        :math:`\\lambda = \\frac{2.648151 \cdot 10^{-3} T^{3/2}}{T + (245.4
+        :math:`\\lambda = \\frac{2.648151 \\cdot 10^{-3} T^{3/2}}{T + (245.4
         \\cdot 10^{-12/T})}`
         """
         T = self.temperature

@@ -355,14 +355,28 @@ def test_subclassing():
 def test_from_pressure():
     """Test instantiation of Atmosphere with 'from_pressure()' method"""
 
-    with pytest.raises(ValueError):
-        Atmosphere.from_pressure(-15.6)
+    value_errors = [
+        -15.6,
+        (),
+        [[]],
+        [1, [2, 3]],
+        [1e5, 0],
+        CONST.p_min*0.9,
+        CONST.p_max*1.1,
+    ]
 
-    with pytest.raises(ValueError):
-        Atmosphere.from_pressure([1e5, 0])
+    for value_error in value_errors:
+        with pytest.raises(ValueError):
+            Atmosphere.from_pressure(value_error)
 
     # --- Scalar input ---
-    for h_exp in np.arange(CONST.h_min+1000, CONST.h_max, 171.3):
+    for h_exp in np.arange(CONST.h_min, CONST.h_max, 30.):
+        p = Atmosphere(h_exp).pressure
+        h_comp = Atmosphere.from_pressure(p).h
+        assert h_exp == approx(h_comp)
+
+    # Test boundaries
+    for h_exp in [CONST.h_min, CONST.h_max]:
         p = Atmosphere(h_exp).pressure
         h_comp = Atmosphere.from_pressure(p).h
         assert h_exp == approx(h_comp)
@@ -371,7 +385,12 @@ def test_from_pressure():
     h_exp = [0, -2000, 1e3, 30e3, -50, 71938]
     p = Atmosphere(h_exp).pressure
     h_comp = Atmosphere.from_pressure(p).h
-    assert np.testing.assert_allclose(h_exp, h_comp) is None
+    assert np.testing.assert_allclose(h_exp, h_comp, atol=1e-9) is None
+
+    # Whole pressure range can be passed in
+    p = np.linspace(CONST.p_min, CONST.p_max, 1000)
+    atmos = Atmosphere.from_pressure(p)
+    assert np.testing.assert_allclose(p, atmos.pressure) is None
 
     # --- Matrix input ---
     h_exp = np.array([
@@ -381,7 +400,7 @@ def test_from_pressure():
     ])
     p = Atmosphere(h_exp).pressure
     h_comp = Atmosphere.from_pressure(p).h
-    assert np.testing.assert_allclose(h_exp, h_comp) is None
+    assert np.testing.assert_allclose(h_exp, h_comp, atol=1e-9) is None
 
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ Creating an Atmosphere object
 
 |name| provides a class called ``Atmosphere`` from which atmospheric properties can be derived. An instance of ``Atmosphere`` can be created with the altitudes at which atmospheric properties are to be evaluated.
 
-**Example** If you wanted to know some properties at, say, *0 m*, *1000 m* and *10000 m*, all you need to do is to call `Atmosphere` with these altitudes.
+**Example** If you wanted to compute some properties at, say, :math:`0\,\textrm{m}`, :math:`1000\,\textrm{m}` and :math:`10\,000\,\textrm{m}`, all you need to do is to call `Atmosphere` with these altitudes.
 
 .. code:: python
 
@@ -61,7 +61,7 @@ Computing atmospheric properties
 
 .. hint::
 
-    All properties will be returned in `SI units`_ (or SI derived units). In the above example, pressure is given in *[Newton/meter²]*, gravitational acceleration in *[meter/second²]* and speed of sound in *[meter/second]*.
+    All properties will be returned in `SI units`_ (or SI derived units). In the above example, *pressure* is given in :math:`N/m^2`, *gravitational acceleration* in :math:`m/s^2` and *speed of sound* in :math:`m/s`.
 
 **List of available atmospheric properties**
 
@@ -94,16 +94,16 @@ Computing atmospheric properties
     array([['stratosphere', 'mesosphere'],
            ['troposphere', 'stratosphere']], dtype='<U53')
 
-The attribute ``layer_name`` returns a *Numpy* string array which can be further manipulated in many ways.
+The attribute ``layer_name`` returns a *NumPy* string array which can be further manipulated in many ways.
 
 .. seealso::
 
-    **Numpy string operations:** https://docs.scipy.org/doc/numpy/reference/routines.char.html
+    **NumPy string operations:** https://docs.scipy.org/doc/numpy/reference/routines.char.html
 
 Input data
 ----------
 
-The height data passed to ``Atmosphere`` can be a single value (integer, float), a vector (list, tuple, *Numpy* vector) or a matrix (iterable of an iterable, *Numpy* matrix). The heights do not have to be ordered in any specific way.
+The height data passed to ``Atmosphere`` can be a single value (integer, float), a vector (list, tuple, *NumPy* vector) or a matrix (iterable of an iterable, *NumPy* matrix). The heights do not have to be ordered in any specific way.
 
 .. code:: python
 
@@ -125,7 +125,7 @@ The height data passed to ``Atmosphere`` can be a single value (integer, float),
 Instantiating from given pressure
 ---------------------------------
 
-An ``Atmosphere`` object can also be instantiated from given ambient pressure. To do so you can use the ``Atmosphere.from_pressure()`` method. This method takes pressure values in :math:`Pa = N/m^2` as input. Scalar, vector- and matrix-like input is accepted. ``Atmosphere.from_pressure()`` returns a new atmosphere instance which let's you easily check other atmospheric properties too, like temperature.
+An ``Atmosphere`` object can also be instantiated from given ambient pressure. To do so you can use the ``Atmosphere.from_pressure()`` method. This method takes pressure values in :math:`Pa = N/m^2` as input. Scalar, vector- and matrix-like input is accepted. ``Atmosphere.from_pressure()`` returns a new atmosphere instance which lets you easily check other atmospheric properties too, like temperature.
 
 .. code:: python
 
@@ -146,7 +146,7 @@ An ``Atmosphere`` object can also be instantiated from given ambient pressure. T
     array([  110.88636257, 16220.98996248, 31207.06116863, 48182.51841281,
            65617.3058236 , 80304.40565541])
 
-``Atmosphere.from_pressure()`` uses SciPy's `newton method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.newton.html>`_ is used to find approximate atmospheric altitudes. The method uses the default tolerance settings from ``scipy.optimize.newton()`` when determining the altitude. The initial guess for the altitude is 0 for all pressure values.
+``Atmosphere.from_pressure()`` uses SciPy's `Newton method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.newton.html>`_ to find approximate atmospheric altitudes. The method uses the default tolerance settings from ``scipy.optimize.newton()`` when determining the altitude. The initial guess for the altitude is zero for all pressure values.
 
 Converting units
 ----------------

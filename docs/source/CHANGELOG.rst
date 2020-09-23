@@ -3,6 +3,17 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[1.1.0] -- 2020-09-23
+---------------------
+
+Changed
+~~~~~~~
+
+* Improvement in ``from_pressure()`` method
+
+    * Atmosphere can be instantiated from minimum to maximum heights
+    * See issue: https://github.com/airinnova/ambiance/issues/5
+
 [1.0.2] -- 2020-09-19
 ---------------------
 
@@ -10,6 +21,7 @@ Changed
 ~~~~~~~
 
 * Improvements in ``from_pressure()`` method
+
     * Use Newton method instead of bisection
     * Allow any tensor-like input
 
@@ -20,6 +32,7 @@ Added
 ~~~~~
 
 * Add classmethod ``from_pressure()`` to instantiate an atmosphere from given pressure
+
     * Suggestion from: https://github.com/airinnova/ambiance/issues/4
     * Only scalar inputs are supported
 
@@ -70,6 +83,7 @@ Changed
 ~~~~~~~
 
 * Renamed the class `ambiance.Constant` to `ambiance._Const`/`ambiance.CONST`
+
     * Clearer indication that this class is meant to be "private"/constant
 
 [0.2.1] -- 2019-08-03
@@ -79,6 +93,7 @@ Fixed
 ~~~~~
 
 * `int` and `float` input reported to produce different values
+
     * See https://github.com/aarondettmann/ambiance/issues/1
 
 [0.2.0] -- 2019-07-28
@@ -118,6 +133,7 @@ Added
 ~~~~~
 
 * Initial release
+
     * Basic implementation of the ICAO 1993 atmosphere
     * Single values and arrays can be processed
     * Basic test cases included
