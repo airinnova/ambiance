@@ -65,11 +65,11 @@ Computing atmospheric properties
 
 **List of available atmospheric properties**
 
-* Geometric height (``h``)
-* Geopotential height (``H``)
 * Collision frequency (``collision_frequency``)
 * Density (``density``)
 * Dynamic viscosity (``dynamic_viscosity``)
+* Geometric height above MSL (``h``)
+* Geopotential height (``H``)
 * Gravitational acceleration (``grav_accel``)
 * Kinematic viscosity (``kinematic_viscosity``)
 * Layer names (``layer_name``) [string array]
