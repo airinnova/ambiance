@@ -54,6 +54,8 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
 * Collision frequency (``collision_frequency``)
 * Density (``density``)
 * Dynamic viscosity (``dynamic_viscosity``)
+* Geometric height above MSL (``h``)
+* Geopotential height (``h``)
 * Gravitational acceleration (``grav_accel``)
 * Kinematic viscosity (``kinematic_viscosity``)
 * Layer names (``layer_name``) [string array]
