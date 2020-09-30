@@ -68,7 +68,7 @@ Computing atmospheric properties
 * Collision frequency (``collision_frequency``)
 * Density (``density``)
 * Dynamic viscosity (``dynamic_viscosity``)
-* Geometric height above MSL (``h``)
+* Geometric height above `MSL <https://en.wikipedia.org/wiki/Sea_level>`_ (``h``)
 * Geopotential height (``H``)
 * Gravitational acceleration (``grav_accel``)
 * Kinematic viscosity (``kinematic_viscosity``)
@@ -136,7 +136,7 @@ An ``Atmosphere`` object can also be instantiated from given ambient pressure. T
 
     >>> # Geometric altitude
     >>> atmos.h
-    array([0.])
+    array([1.6616131e-12])
 
     >>> # Temperature
     >>> atmos.temperature

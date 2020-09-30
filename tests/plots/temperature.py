@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
+
+HERE = os.path.abspath(os.path.dirname(__file__))
+FILE_NAME = os.path.basename(__file__).replace('.py', '.png')
+PATH_OUT = os.path.join(HERE, FILE_NAME)
+
+# ==================================================
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -17,3 +25,8 @@ plt.ylabel('Height [km]')
 plt.xlabel('Temperature [°C]')
 plt.grid()
 plt.show()
+
+# ==================================================
+
+plt.savefig(PATH_OUT)
+plt.clf()

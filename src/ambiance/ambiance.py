@@ -22,7 +22,7 @@
 """
 Compute atmospheric properties for heights ranging from -5 km to 80 km.
 
-The implementation is based on the ICAO standard atmosphere from 1993:
+The implementation is based on the ICAO standard atmosphere from 1993.
 
 References:
 ===========
@@ -41,7 +41,7 @@ from itertools import tee
 import numpy as np
 import scipy.optimize as opt
 
-EPS = 1e-9
+_EPS = 1e-9
 
 
 def pairwise(iterable):
@@ -58,7 +58,7 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-class Const:
+class CONST:
     """
     Constants defined in the ICAO standard atmosphere (1993)
 
@@ -179,9 +179,6 @@ class Const:
             MAX_STR_LEN_LAYER_NAME = len(layer_name)
 
 
-CONST = Const
-
-
 class Atmosphere:
     """
     Representation of the ICAO standard atmosphere (1993)
@@ -228,7 +225,7 @@ class Atmosphere:
         """Return a new instance from given geometric height(s)"""
 
         self.h = self._make_tensor(h)
-        if check_bounds and ((self.h < CONST.h_min-EPS).any() or (self.h > CONST.h_max+EPS).any()):
+        if check_bounds and ((self.h < CONST.h_min-_EPS).any() or (self.h > CONST.h_max+_EPS).any()):
             raise ValueError(
                 "Value out of bounds." +
                 f" Lower limit: {CONST.h_min:.0f} m." +
@@ -243,7 +240,7 @@ class Atmosphere:
         """Return a new instance for given pressure value(s)"""
 
         p = cls._make_tensor(p)
-        if (p < CONST.p_min-EPS).any() or (p > CONST.p_max+EPS).any():
+        if (p < CONST.p_min-_EPS).any() or (p > CONST.p_max+_EPS).any():
             raise ValueError(
                 "Value out of bounds." +
                 f" Lower limit: {CONST.p_min:.1f} Pa." +
@@ -253,10 +250,12 @@ class Atmosphere:
         def f(ht):
             # * Use log() for faster convergence in Newton method
             # * Allow Newton method to 'overshoot', do not check bounds
-            return np.log(p/cls(ht, check_bounds=False).pressure)
+            return np.log10(p/cls(ht, check_bounds=False).pressure)
 
-        h = opt.newton(f, np.zeros_like(p))
-        return cls(h)
+        # Initial guess is based on noting that log10(pressure) vs. height is
+        # approximately a straight line. Height can be roughly estimated from
+        # h/1[m] = 80e3 - 16e3*log10(p/1[Pa]) (tweaked slightly below).
+        return cls(h=opt.newton(f, x0=81e3-16e3*np.log10(p)))
 
     def __str__(self):
         return f'{self.__class__.__qualname__}({self.h!r})'

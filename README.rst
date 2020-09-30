@@ -54,7 +54,7 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
 * Collision frequency (``collision_frequency``)
 * Density (``density``)
 * Dynamic viscosity (``dynamic_viscosity``)
-* Geometric height above MSL (``h``)
+* Geometric height above `MSL <https://en.wikipedia.org/wiki/Sea_level>`_ (``h``)
 * Geopotential height (``H``)
 * Gravitational acceleration (``grav_accel``)
 * Kinematic viscosity (``kinematic_viscosity``)
@@ -92,7 +92,7 @@ Atmospheric properties are computed from an "Atmosphere object" which takes the 
 
 The output is
 
-.. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/temperature_plot.png
+.. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/temperature.png
    :alt: Temperature plot
 
 **Matrix-like input**

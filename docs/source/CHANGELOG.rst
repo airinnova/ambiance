@@ -3,6 +3,19 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[1.1.1] -- 2020-09-30
+---------------------
+
+Removed
+~~~~~~~
+
+* Removed unnecessary alias ``Const`` from module ``ambiance``
+
+Changed
+~~~~~~~
+
+* Rename ``ambiance.EPS`` to private ``ambiance._EPS``
+
 [1.1.0] -- 2020-09-23
 ---------------------
 

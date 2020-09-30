@@ -13,7 +13,7 @@ Welcome to |name|'s documentation!
     from ambiance import Atmosphere
 
     sealevel = Atmosphere(0)
-    sealevel.pressure     # --> 101325. Pascal
+    sealevel.pressure     # --> 101325 Pascal
     sealevel.temperature  # --> 288.15 Kelvin
 
 .. toctree::
@@ -23,6 +23,7 @@ Welcome to |name|'s documentation!
    user_guide/installation
    user_guide/detailed_user_guide
    user_guide/extending
+   user_guide/plots
    user_guide/references
 
 .. toctree::
