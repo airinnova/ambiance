@@ -7,7 +7,6 @@
 ### Documentation
 
 * Add table for layer names
-* Add formulas
 
 ### API change
 

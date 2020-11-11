@@ -7,36 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from ambiance import Atmosphere, CONST
-
+from ambiance._doc import props
 
 HERE = os.path.abspath(os.path.dirname(__file__))
-
-
-class P:
-    def __init__(self, name, unit='', name_long='', log=False):
-        self.name = name
-        self.unit = unit
-        self.name_long = name_long if name_long else self.name.replace('_', ' ').capitalize()
-        self.log = log
-
-
-props = (
-    P('collision_frequency', 'Hz', log=True),
-    P('density', 'kg/m³', log=True),
-    P('dynamic_viscosity', 'Pa·s'),
-    P('grav_accel', 'm/s²', 'Gravitational acceleration'),
-    P('kinematic_viscosity', 'm²/s', log=True),
-    P('mean_free_path', 'm', log=True),
-    P('mean_particle_speed', 'm/s'),
-    P('number_density', 'm$^{-3}$', log=True),
-    P('pressure', 'Pa', log=True),
-    P('pressure_scale_height', 'm'),
-    P('specific_weight', 'N/m³', log=True),
-    P('speed_of_sound', 'm/s'),
-    P('temperature', 'K'),
-    P('temperature_in_celsius', '°C'),
-    P('thermal_conductivity', 'W/(m·K)'),
-)
 
 
 def make_plots():
@@ -44,9 +17,9 @@ def make_plots():
     a = Atmosphere(h)
     hs = h/1000
 
-    lw = 2
-    cp1 = 'black'
-    cp2 = 'red'
+    lw = 1.5
+    cp1 = 'blue'
+    cp2 = 'green'
 
     for p in props:
         fig, ax1 = plt.subplots()

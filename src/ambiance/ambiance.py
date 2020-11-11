@@ -405,43 +405,23 @@ class Atmosphere:
 
     @property
     def grav_accel(self):
-        """
-        Gravitational acceleration :math:`g`
-
-        :math:`g = g_0 \\left( \\frac{r}{r + h} \\right)^2`
-        """
+        """Gravitational acceleration :math:`g`"""
         return CONST.g_0*(CONST.r/(CONST.r + self.h))**2
 
     @property
     def temperature(self):
-        """
-        Air temperature :math:`T` in Kelvin
-
-        :math:`T = T_b + \\beta (H - H_b)`
-        """
+        """Air temperature :math:`T` in Kelvin"""
         H_b, T_b, beta, _ = self._get_layer_params()
         return T_b + beta*(self.H - H_b)
 
     @property
     def temperature_in_celsius(self):
-        """
-        Air temperature :math:`t` in Celsius
-
-        :math:`t = T - T_i`
-        """
+        """Air temperature :math:`t` in Celsius"""
         return self.T2t(self.temperature)
 
     @property
     def pressure(self):
-        """
-        Air pressure :math:`p`
-
-        :math:`p = p_b \\exp \\left[ - \\frac{g_0}{R T} (H - H_b) \\right]
-        \\quad \\text{for} \\quad \\beta = 0`
-
-        :math:`p = p_b \\left[ 1 + \\frac{\\beta}{T_b} (H - H_b) \\right]^{-g_0
-        \\beta / R} \\quad \\text{for} \\quad \\beta \\neq 0`
-        """
+        """Air pressure :math:`p`"""
         H_b, T_b, beta, p_b = self._get_layer_params()
 
         # Note: Pressure is computed differently for beta = 0 and for beta != 0
@@ -465,106 +445,60 @@ class Atmosphere:
 
     @property
     def density(self):
-        """
-        Air density :math:`\\rho`
-
-        :math:`\\rho = \\frac{p}{R T}`
-        """
+        """Air density :math:`\\rho`"""
         return self.pressure/(CONST.R*self.temperature)
 
     @property
     def specific_weight(self):
-        """
-        Specific weight :math:`\\gamma`
-
-        :math:`\\gamma = \\rho g`
-        """
+        """Specific weight :math:`\\gamma`"""
         return self.density*self.grav_accel
 
     @property
     def pressure_scale_height(self):
-        """
-        Pressure scale height :math:`H_p`
-
-        :math:`H_p = \\frac{R T}{g}`
-        """
+        """Pressure scale height :math:`H_p`"""
         return CONST.R*self.temperature/self.grav_accel
 
     @property
     def number_density(self):
-        """
-        Number density :math:`n`
-
-        :math:`n = \\frac{N_A p}{R^{*} T}`
-        """
+        """Number density :math:`n`"""
         return CONST.N_A*self.pressure/(CONST.R_star*self.temperature)
 
     @property
     def mean_particle_speed(self):
-        """
-        Mean particle speed :math:`\\bar{\\nu}`
-
-        :math:`\\bar{\\nu} = \\left( \\frac{8}{\\pi} R T \\right)^{1/2}`
-        """
+        """Mean particle speed :math:`\\bar{\\nu}`"""
         T = self.temperature
         return np.sqrt((8/np.pi)*CONST.R*T)
 
     @property
     def mean_free_path(self):
-        """
-        Mean free path :math:`l`
-
-        :math:`l = \\frac{1}{\\sqrt{2} \\pi \\sigma^2 n}`
-        """
+        """Mean free path :math:`l`"""
         return 1/(np.sqrt(2)*np.pi*CONST.sigma**2*self.number_density)
 
     @property
     def collision_frequency(self):
-        """
-        Collision frequency :math:`\\omega`
-
-        :math:`\\omega = 4 \\sigma^2 N_A \\left( \\frac{\\pi}{R^{*} M_0}
-        \\right)^{1/2} \\frac{p}{\\sqrt{T}}`
-        """
+        """Collision frequency :math:`\\omega`"""
         return 4*CONST.sigma**2*CONST.N_A * \
             (np.sqrt(np.pi/(CONST.R_star*CONST.M_0))) * \
             (self.pressure/np.sqrt(self.temperature))
 
     @property
     def speed_of_sound(self):
-        """
-        Speed of sound :math:`a`
-
-        :math:`a = \\sqrt{\\kappa R T}`
-        """
+        """Speed of sound :math:`a`"""
         return np.sqrt(CONST.kappa*CONST.R*self.temperature)
 
     @property
     def dynamic_viscosity(self):
-        """
-        Dynamic viscosity :math:`\\mu`
-
-        :math:`\\mu = \\frac{\\beta_s T^{3/2}}{T + S}`
-        """
+        """Dynamic viscosity :math:`\\mu`"""
         T = self.temperature
         return CONST.beta_s*T**1.5/(T + CONST.S)
 
     @property
     def kinematic_viscosity(self):
-        """
-        Kinematic viscosity :math:`\\nu`
-
-        :math:`\\nu = \\frac{\\mu}{\\rho}`
-        """
+        """Kinematic viscosity :math:`\\nu`"""
         return self.dynamic_viscosity/self.density
 
     @property
     def thermal_conductivity(self):
-        """
-        Thermal conductivity :math:`\\lambda`
-
-        :math:`\\lambda = \\frac{2.648151 \\cdot 10^{-3} T^{3/2}}{T + (245.4
-        \\cdot 10^{-12/T})}`
-        """
+        """Thermal conductivity :math:`\\lambda`"""
         T = self.temperature
         return 2.648151e-3*T**1.5/(T + (245.4*10**(-12/T)))

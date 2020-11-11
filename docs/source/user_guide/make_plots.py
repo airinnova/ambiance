@@ -7,9 +7,9 @@ import sys
 HERE = os.path.abspath(os.path.dirname(__file__))
 os.chdir(HERE)
 
-sys.path.insert(0, os.path.abspath('../../../tests/plots/props'))
+sys.path.insert(0, os.path.abspath('../../../src/ambiance'))
 
-from props import props
+from _doc import props
 
 URL_PLOTS = 'https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/props/'
 
@@ -19,6 +19,7 @@ UNDERLINE_SECTION = {
     2: "~",
     3: "^",
 }
+
 
 def get_header(string, level=0):
     """
@@ -41,12 +42,26 @@ def add_plot(name):
     return rst
 
 
+def add_descr(p):
+    rst = "\n**Equation:** "
+    if isinstance(p.eq, tuple):
+        rst += "\n"
+        for eq in p.eq:
+            rst += f'\n:math:`{eq}`\n'
+    else:
+        rst += f':math:`{p.eq}`\n'
+
+    rst += "\n"
+    return rst
+
+
 rst = ""
 rst += get_header("Plots", 0)
 
 for p in props:
     rst += get_header(p.name_long, 1)
     rst += add_plot(p.name)
+    rst += add_descr(p)
 
 with open('plots.rst', 'w') as fp:
     fp.write(rst)

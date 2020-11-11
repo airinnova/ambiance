@@ -8,12 +8,18 @@ Collision frequency
    :align: left
    :alt: collision_frequency
 
+
+**Equation:** :math:`\omega = 4 \sigma^2 N_A \left( \frac{\pi}{R^{*} M_0} \right)^{1/2} \frac{p}{\sqrt{T}}`
+
 Density
 -------
 
 .. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/props//density.png
    :align: left
    :alt: density
+
+
+**Equation:** :math:`\rho = \frac{p}{R T}`
 
 Dynamic viscosity
 -----------------
@@ -22,12 +28,18 @@ Dynamic viscosity
    :align: left
    :alt: dynamic_viscosity
 
+
+**Equation:** :math:`\mu = \frac{\beta_s T^{3/2}}{T + S}`
+
 Gravitational acceleration
 --------------------------
 
 .. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/props//grav_accel.png
    :align: left
    :alt: grav_accel
+
+
+**Equation:** :math:`g = g_0 \left( \frac{r}{r + h} \right)^2`
 
 Kinematic viscosity
 -------------------
@@ -36,12 +48,18 @@ Kinematic viscosity
    :align: left
    :alt: kinematic_viscosity
 
+
+**Equation:** :math:`\nu = \frac{\mu}{\rho}`
+
 Mean free path
 --------------
 
 .. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/props//mean_free_path.png
    :align: left
    :alt: mean_free_path
+
+
+**Equation:** :math:`l = \frac{1}{\sqrt{2} \pi \sigma^2 n}`
 
 Mean particle speed
 -------------------
@@ -50,12 +68,18 @@ Mean particle speed
    :align: left
    :alt: mean_particle_speed
 
+
+**Equation:** :math:`\bar{\nu} = \left( \frac{8}{\pi} R T \right)^{1/2}`
+
 Number density
 --------------
 
 .. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/props//number_density.png
    :align: left
    :alt: number_density
+
+
+**Equation:** :math:`n = \frac{N_A p}{R^{*} T}`
 
 Pressure
 --------
@@ -64,12 +88,22 @@ Pressure
    :align: left
    :alt: pressure
 
+
+**Equation:** 
+
+:math:`p = p_b \exp \left[ - \frac{g_0}{R T} (H - H_b) \right] \quad \text{for} \quad \beta = 0`
+
+:math:`p = p_b \left[ 1 + \frac{\beta}{T_b} (H - H_b) \right]^{-g_0 \beta / R} \quad \text{for} \quad \beta \neq 0`
+
 Pressure scale height
 ---------------------
 
 .. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/props//pressure_scale_height.png
    :align: left
    :alt: pressure_scale_height
+
+
+**Equation:** :math:`H_p = \frac{R T}{g}`
 
 Specific weight
 ---------------
@@ -78,12 +112,18 @@ Specific weight
    :align: left
    :alt: specific_weight
 
+
+**Equation:** :math:`\gamma = \rho g`
+
 Speed of sound
 --------------
 
 .. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/props//speed_of_sound.png
    :align: left
    :alt: speed_of_sound
+
+
+**Equation:** :math:`a = \sqrt{\kappa R T}`
 
 Temperature
 -----------
@@ -92,12 +132,18 @@ Temperature
    :align: left
    :alt: temperature
 
-Temperature in celsius
-----------------------
+
+**Equation:** :math:`T = T_b + \beta (H - H_b)`
+
+Temperature (Celsius)
+---------------------
 
 .. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/props//temperature_in_celsius.png
    :align: left
    :alt: temperature_in_celsius
+
+
+**Equation:** :math:`t = T - T_i`
 
 Thermal conductivity
 --------------------
@@ -105,4 +151,7 @@ Thermal conductivity
 .. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/props//thermal_conductivity.png
    :align: left
    :alt: thermal_conductivity
+
+
+**Equation:** :math:`\lambda = \frac{2.648151 \cdot 10^{-3} T^{3/2}}{T + (245.4 \cdot 10^{-12/T})}`
 
