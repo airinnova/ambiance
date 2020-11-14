@@ -23,8 +23,13 @@ Welcome to |name|'s documentation!
    user_guide/installation
    user_guide/detailed_user_guide
    user_guide/extending
-   user_guide/plots
-   user_guide/references
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Theory
+
+   theory/model
+   theory/references
 
 .. toctree::
    :maxdepth: 1

@@ -6,6 +6,13 @@ List of properties for documentation purposes
 """
 
 
+class V:
+    def __init__(self, *, symb='', name='', unit=''):
+        self.symb = symb
+        self.name = name
+        self.unit = unit
+
+
 class P:
     def __init__(self, name, unit='', name_long='', *, log=False, symb='', eq=''):
         self.name = name
@@ -14,6 +21,90 @@ class P:
         self.log = log
         self.symb = symb
         self.eq = eq
+
+
+vars_const = (
+    V(
+        symb='g_0',
+        name='Standard gravitational acceleration',
+        unit='m/s²',
+    ),
+    V(
+        symb='M_0',
+        name='Sea level mean molar mass',
+        unit='kg/mol',
+    ),
+    V(
+        symb='N_A',
+        name='Avogadro constant',
+        unit='mol⁻¹',
+    ),
+    V(
+        symb='P_0',
+        name='Sea level atmospheric pressure',
+        unit='Pa',
+    ),
+    V(
+        symb='R^{*}',
+        name='Universal gas constant',
+        unit='J/(K·mol)',
+    ),
+    V(
+        symb='R',
+        name='Specific gas constant',
+        unit='J/(K·kg)',
+    ),
+    V(
+        symb='S',
+        name='Sutherland\'s empirical constant in the equation for dynamic viscosity',
+        unit='K',
+    ),
+    V(
+        symb='T_i',
+        name='Temperature of the ice point at mean sea level',
+        unit='K',
+    ),
+    V(
+        symb='T_0',
+        name='Sea level temperature',
+        unit='K',
+    ),
+    V(
+        symb='t_i',
+        name='Celsius temperature of the ice point at mean sea level',
+        unit='°C',
+    ),
+    V(
+        symb='t_0',
+        name='Celsius sea level temperature',
+        unit='°C',
+    ),
+    V(
+        symb='\\beta_s',
+        name='Sutherland\'s empirical constant in the equation for dynamic viscosity',
+        unit='kg/(m·s·K^(1/2))',
+    ),
+    V(
+        symb='\\kappa',
+        name='Adiabatic index',
+        unit='1',
+    ),
+    V(
+        symb='\\rho_0',
+        name='Sea level atmospheric density',
+        unit='kg/m³',
+    ),
+    V(
+        symb='\\sigma',
+        name='Effective collision diameter of an air molecule',
+        unit='m',
+    ),
+    V(
+        symb='r',
+        name='Nominal Earth\'s radius',
+        unit='m',
+    ),
+)
 
 
 props = (
@@ -67,7 +158,7 @@ props = (
     ),
     P(
         'number_density',
-        'm$^{-3}$',
+        'm⁻³',
         log=True,
         symb='n',
         eq='n = \\frac{N_A p}{R^{*} T}',

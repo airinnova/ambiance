@@ -33,7 +33,7 @@ version = __version__
 
 # Update the auto-docs
 os.system('bash ./dev_doc/gen_auto_doc.sh')
-os.system('python ./user_guide/make_plots.py')
+os.system('python ./theory/make_model_page.py')
 
 # -- General configuration ---------------------------------------------------
 extensions = [
