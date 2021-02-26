@@ -24,7 +24,7 @@ REQUIRED = [
     'scipy',
 ]
 README = 'README.rst'
-PACKAGE_DIR = 'src/'
+PACKAGE_DIR = 'src'
 LICENSE = 'Apache License 2.0'
 
 setuptools.setup(
