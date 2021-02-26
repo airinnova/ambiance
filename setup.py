@@ -3,13 +3,17 @@
 
 import setuptools
 import os
+from pathlib import Path
 
-from src.ambiance.__version__ import __version__
+here = Path(__file__).parent.resolve()
+# See also: https://packaging.python.org/guides/single-sourcing-package-version/
+version = {}
+exec(here.joinpath("src", "ambiance", "__version__.py").read_text(), version)
 
 # See also: https://github.com/kennethreitz/setup.py/blob/master/setup.py
 
 NAME = 'ambiance'
-VERSION = __version__
+VERSION = version["__version__"]
 AUTHOR = 'Aaron Dettmann'
 EMAIL = 'dettmann@kth.se'
 DESCRIPTION = 'A full implementation of the ICAO standard atmosphere 1993'
@@ -23,19 +27,13 @@ README = 'README.rst'
 PACKAGE_DIR = 'src/'
 LICENSE = 'Apache License 2.0'
 
-
-here = os.path.abspath(os.path.dirname(__file__))
-
-with open(os.path.join(here, README), "r") as fp:
-    long_description = fp.read()
-
 setuptools.setup(
     name=NAME,
     version=VERSION,
     author=AUTHOR,
     author_email=EMAIL,
     description=DESCRIPTION,
-    long_description=long_description,
+    long_description=here.joinpath(README).read_text(),
     url=URL,
     include_package_data=True,
     package_dir={'': PACKAGE_DIR},
@@ -57,4 +55,9 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Physics",
         "Topic :: Scientific/Engineering :: Atmospheric Science",
     ],
+    project_urls={
+        'Documentation': 'https://ambiance.readthedocs.io/',
+        'Source': URL,
+        'Tracker': URL + 'issues',
+    },
 )
