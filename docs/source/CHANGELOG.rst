@@ -3,6 +3,11 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[1.1.2] -- 2021-02-28
+---------------------
+
+* Package build improvements, see https://github.com/airinnova/ambiance/pull/7
+
 [1.1.1] -- 2020-09-30
 ---------------------
 
