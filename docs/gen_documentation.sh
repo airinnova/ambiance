@@ -1,17 +1,11 @@
 #!/usr/bin/env bash
 
-# DOCUMENTATION GENERATION
-#
-# Sphinx is used to generate the documentation
-# See: http://www.sphinx-doc.org/en/master/
-
 make_list="$@"
 
 if [[ "$make_list" == "" ]]; then
-    echo "Error: specify format"
-    exit 1
+    echo "W: Format not specified. Using HTML."
+    make_list="html"
 fi
-
 
 while true; do
     make clean
