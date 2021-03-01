@@ -3,6 +3,12 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[1.2.0] -- 2021-03-01
+---------------------
+
+* Fix Numpy integer overflow error on Windows when calling conversion functions
+  as class functions
+
 [1.1.2] -- 2021-02-28
 ---------------------
 

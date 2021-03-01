@@ -135,8 +135,8 @@ An ``Atmosphere`` object can also be instantiated from given ambient pressure. T
     >>> atmos = Atmosphere.from_pressure(101325)
 
     >>> # Geometric altitude
-    >>> atmos.h
-    array([1.6616131e-12])
+    >>> atmos.h.round(2)
+    array([0.])
 
     >>> # Temperature
     >>> atmos.temperature
@@ -144,9 +144,8 @@ An ``Atmosphere`` object can also be instantiated from given ambient pressure. T
 
     >>> # You can also pass in multiple pressure values at once...
     >>> atmos = Atmosphere.from_pressure([1e5, 1e4, 1e3, 1e2, 1e1, 1e0])
-    >>> atmos.h
-    array([  110.88636257, 16220.98996248, 31207.06116863, 48182.51841281,
-           65617.3058236 , 80304.40565541])
+    >>> atmos.h.round(2)
+    array([  110.89, 16220.99, 31207.06, 48182.52, 65617.31, 80304.41])
 
 ``Atmosphere.from_pressure()`` uses SciPy's `Newton method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.newton.html>`_ to find approximate atmospheric altitudes. The method uses the default tolerance settings from ``scipy.optimize.newton()`` when determining the altitude. The initial guess for the altitude is zero for all pressure values.
 
@@ -163,7 +162,7 @@ Convert from a temperature in degree Celsius to a temperature in Kelvin:
 .. code:: python
 
     >>> Atmosphere.t2T(0)
-    273.15
+    array([273.15])
 
     >>> Atmosphere.t2T([0, 10, 30.5])
     array([273.15, 283.15, 303.65])
@@ -173,7 +172,7 @@ Convert from a temperature in Kelvin to a temperature in Celsius:
 .. code:: python
 
     >>> Atmosphere.T2t(273.15)
-    0.0
+    array([0.])
 
     >>> Atmosphere.T2t([273.15, 283.15, 303.65])
     array([ 0. , 10. , 30.5])
@@ -186,9 +185,9 @@ Convert from a *geometric* to a *geopotential* height.
 .. code:: python
 
     >>> Atmosphere.geom2geop_height(10000)
-    9984.293438772525
+    array([9984.29343877])
 
     Convert from a *geopotential* to a *geometric* height.
 
     >>> Atmosphere.geop2geom_height(9984.293438772525)
-    10000.0
+    array([10000.])

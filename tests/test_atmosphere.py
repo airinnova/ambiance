@@ -309,10 +309,10 @@ def test_kelvin_celsius_conversion():
 
     # Make sure "back and forth" conversion works
     for t in np.arange(-200, 1000, 30):
-        assert t == approx(Atmosphere.T2t(Atmosphere.t2T(t)))
+        assert t == approx(Atmosphere.T2t(Atmosphere.t2T(float(t))))
 
     for T in np.arange(0, 1000, 30):
-        assert T == approx(Atmosphere.t2T(Atmosphere.T2t(T)))
+        assert T == approx(Atmosphere.t2T(Atmosphere.T2t(float(T))))
 
 
 def test_geom_geop_height_conversion():

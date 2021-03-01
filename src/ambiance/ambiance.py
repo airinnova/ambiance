@@ -310,7 +310,7 @@ class Atmosphere:
 
         :math:`H = \\frac{r h}{r + h}`
         """
-        h = np.asarray(h)
+        h = __class__._make_tensor(h)
         return CONST.r*h/(CONST.r + h)
 
     @staticmethod
@@ -320,7 +320,7 @@ class Atmosphere:
 
         :math:`h = \\frac{r H}{r - H}`
         """
-        H = np.asarray(H)
+        H = __class__._make_tensor(H)
         return CONST.r*H/(CONST.r - H)
 
     @staticmethod
@@ -330,7 +330,7 @@ class Atmosphere:
 
         :math:`T = t + T_i`
         """
-        return CONST.T_i + np.asarray(t)
+        return CONST.T_i + __class__._make_tensor(t)
 
     @staticmethod
     def T2t(T):
@@ -339,7 +339,7 @@ class Atmosphere:
 
         :math:`t = T - T_i`
         """
-        return np.asarray(T) - CONST.T_i
+        return __class__._make_tensor(T) - CONST.T_i
 
     def _get_layer_nums(self):
         """Return array of same shape as 'self.H' with corresponding layer numbers"""
