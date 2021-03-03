@@ -29,6 +29,12 @@ def test_str():
     assert str(Atmosphere([1, 100, 1000])) == 'Atmosphere(array([   1.,  100., 1000.]))'
 
 
+def test_doc():
+    import ambiance._doc as doc
+    doc.props
+    doc.vars_const
+
+
 def test_hash():
     assert isinstance(hash(Atmosphere(0)), int)
     a1 = Atmosphere(0)
@@ -64,6 +70,25 @@ def test_invalid_inputs():
     for invalid_input in value_errors:
         with pytest.raises(ValueError):
             Atmosphere(invalid_input)
+
+
+def test_set_height_after_instantiating():
+    """Do not allow to set heights (h, H) after instantiating"""
+
+    atmos = Atmosphere(0)
+
+    attr_errors = [
+        0,
+        1.2,
+        np.array([1, 2, 3]),
+    ]
+
+    for invalid_input in attr_errors:
+        with pytest.raises(AttributeError):
+            atmos.h = invalid_input
+
+        with pytest.raises(AttributeError):
+            atmos.H = invalid_input
 
 
 def test_out_of_bounds_error():
@@ -401,6 +426,47 @@ def test_from_pressure():
     p = Atmosphere(h_exp).pressure
     h_comp = Atmosphere.from_pressure(p).h
     assert np.testing.assert_allclose(h_exp, h_comp, atol=1e-9) is None
+
+
+def test_integer_overflow_error():
+    """
+    Check that integer input is not treated differently from float inputs
+
+    Background:
+
+    * In version 1.1.2 utility functions did not explicitely convert integer
+      input to float-valued arrays. Numpy arrays on Windows resulted in
+      completly wrong results (Linux not affected). E.g. on Windows we got:
+
+      h = Atmosphere.geop2geom_height([0, 1000, 10000])
+      atmosphere.h
+      array([   0.        ,  324.39814556, -135.00567691]
+    """
+
+    # --- geop2geom_height ---
+    h_inputs = [
+        [0, 1000, 10000],
+        np.array([0, 1000, 10000], dtype=int),
+        np.asarray([0, 1000, 10000], dtype=int),
+        np.asarray([0, 1000, 10000], dtype=np.int16),
+        np.asarray([0, 1000, 10000], dtype=np.int32),
+        np.asarray([0, 1000, 10000], dtype=np.int64),
+    ]
+    for h_input in h_inputs:
+        h = Atmosphere.geop2geom_height(h_input)
+        atmos = Atmosphere(h)
+        assert atmos.h[0] == approx(0., 1e-4)
+        assert atmos.h[1] == approx(1000.157337, 1e-4)
+        assert atmos.h[2] == approx(10015.756056, 1e-4)
+
+    h = Atmosphere.geop2geom_height(1000)
+    atmos = Atmosphere(h)
+    assert atmos.h[0] == approx(1000.1573374476027, 1e-4)
+
+    # --- geom2geop_height ---
+    H = Atmosphere.geom2geop_height(int(1000))
+    assert Atmosphere.geop2geom_height(H) == approx(1000, 1e-4)
+    assert Atmosphere.geop2geom_height(float(H)) == approx(1000, 1e-4)
 
 
 if __name__ == '__main__':

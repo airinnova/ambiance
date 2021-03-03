@@ -3,8 +3,20 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[1.2.1] -- 2021-03-03 (unpublished)
+---------------------
+
+Changed
+~~~~~~~
+
+* Remove setter method for geometric height. Height can only be set when
+  instantiating the `Atmosphere` object
+
 [1.2.0] -- 2021-03-01
 ---------------------
+
+Fixed
+~~~~~
 
 * Fix Numpy integer overflow error on Windows when calling conversion functions
   as class functions
@@ -35,7 +47,7 @@ Changed
 
 * Improvement in ``from_pressure()`` method
 
-    * Atmosphere can be instantiated from minimum to maximum heights
+    * `Atmosphere` can be instantiated from minimum to maximum heights
     * See issue: https://github.com/airinnova/ambiance/issues/5
 
 [1.0.2] -- 2020-09-19

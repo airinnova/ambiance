@@ -224,7 +224,7 @@ class Atmosphere:
     def __init__(self, h, check_bounds=True):
         """Return a new instance from given geometric height(s)"""
 
-        self.h = self._make_tensor(h)
+        self._h = self._make_tensor(h)
         if check_bounds and ((self.h < CONST.h_min-_EPS).any() or (self.h > CONST.h_max+_EPS).any()):
             raise ValueError(
                 "Value out of bounds." +
@@ -270,10 +270,6 @@ class Atmosphere:
     def h(self):
         """Geometric heights :math:`h`"""
         return self._h
-
-    @h.setter
-    def h(self, h):
-        self._h = h
 
     @property
     def H(self):
