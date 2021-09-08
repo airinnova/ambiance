@@ -246,8 +246,10 @@ class Atmosphere:
         v = cls._make_tensor(value)
         if variable == 'pressure':
             shorthand = 'p'
+            x0_getter = lambda p: 81e3 - 16e3 * np.log10(p)
         elif variable == 'density':
             shorthand = 'rho'
+            x0_getter = lambda rho: 2.33e3 - 16.3e3 * np.log10(rho)
         else:
             raise ValueError(f"Variable {variable} unkown.")
         v_min = getattr(CONST, shorthand + '_min')
@@ -268,7 +270,7 @@ class Atmosphere:
         # Initial guess is based on noting that log10(pressure) vs. height is
         # approximately a straight line. Height can be roughly estimated from
         # h/1[m] = 80e3 - 16e3*log10(p/1[Pa]) (tweaked slightly below).
-        return cls(h=opt.newton(f, x0=81e3-16e3*np.log10(v)))
+        return cls(h=opt.newton(f, x0=x0_getter(v)))
 
     @classmethod
     def from_density(cls, rho):
