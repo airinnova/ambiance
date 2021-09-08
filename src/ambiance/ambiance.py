@@ -243,24 +243,32 @@ class Atmosphere:
 
     @classmethod
     def __from_(cls, variable: str, value: float):
-        p = value
-        p = cls._make_tensor(p)
-        if (p < CONST.p_min-_EPS).any() or (p > CONST.p_max+_EPS).any():
+        v = cls._make_tensor(value)
+        if variable == 'pressure':
+            shorthand = 'p'
+        elif variable == 'density':
+            shorthand = 'rho'
+        else:
+            raise ValueError(f"Variable {variable} unkown.")
+        v_min = getattr(CONST, shorthand + '_min')
+        v_max = getattr(CONST, shorthand + '_max')
+        unit_dict = {'pressure': 'Pa', 'density': 'kg * m^-3'}
+        if (v < v_min - _EPS).any() or (v > v_max + _EPS).any():
             raise ValueError(
                 "Value out of bounds." +
-                f" Lower limit: {CONST.p_min:.1f} Pa." +
-                f" Upper limit: {CONST.p_max:.1f} Pa."
+                f" Lower limit: {v_min:.1f} {unit_dict[variable]}" +
+                f" Upper limit: {v_max:.1f} {unit_dict[variable]}."
             )
 
         def f(ht):
             # * Use log() for faster convergence in Newton method
             # * Allow Newton method to 'overshoot', do not check bounds
-            return np.log10(p/cls(ht, check_bounds=False).pressure)
+            return np.log10(v/cls(ht, check_bounds=False).__getattribute__(variable))
 
         # Initial guess is based on noting that log10(pressure) vs. height is
         # approximately a straight line. Height can be roughly estimated from
         # h/1[m] = 80e3 - 16e3*log10(p/1[Pa]) (tweaked slightly below).
-        return cls(h=opt.newton(f, x0=81e3-16e3*np.log10(p)))
+        return cls(h=opt.newton(f, x0=81e3-16e3*np.log10(v)))
 
     @classmethod
     def from_density(cls, rho):
