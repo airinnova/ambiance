@@ -403,18 +403,18 @@ def test_from_density():
     # Test boundaries
     for h_exp in [CONST.h_min, CONST.h_max]:
         rho = Atmosphere(h_exp).density
-        h_comp = Atmosphere.from_pressure(rho).h
+        h_comp = Atmosphere.from_density(rho).h
         assert h_exp == approx(h_comp)
 
     # --- Vector input ---
     h_exp = [0, -2000, 1e3, 30e3, -50, 71938]
     rho = Atmosphere(h_exp).density
-    h_comp = Atmosphere.from_pressure(rho).h
+    h_comp = Atmosphere.from_density(rho).h
     assert np.testing.assert_allclose(h_exp, h_comp, atol=1e-9) is None
 
     # Whole density range can be passed in
     rho = np.linspace(CONST.rho_min, CONST.rho_max, 1000)
-    atmos = Atmosphere.from_pressure(rho)
+    atmos = Atmosphere.from_density(rho)
     assert np.testing.assert_allclose(rho, atmos.density) is None
 
     # --- Matrix input ---

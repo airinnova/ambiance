@@ -136,8 +136,8 @@ class CONST:
     H_max = 80_000
 
     # Density limits (computed)
-    rho_min = 1.56994946e-5
-    rho_max = 1.93179069
+    rho_min = 1.569949463833277e-5
+    rho_max = 1.9317906916235779
 
     # Pressure limits (computed)
     p_min = 0.886216717024069
