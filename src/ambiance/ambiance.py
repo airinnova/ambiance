@@ -242,7 +242,7 @@ class Atmosphere:
         self._layer_nums = self._get_layer_nums()
 
     @classmethod
-    def from_(cls, variable: str, value: float):
+    def __from_(cls, variable: str, value: float):
         p = value
         p = cls._make_tensor(p)
         if (p < CONST.p_min-_EPS).any() or (p > CONST.p_max+_EPS).any():
@@ -262,20 +262,15 @@ class Atmosphere:
         # h/1[m] = 80e3 - 16e3*log10(p/1[Pa]) (tweaked slightly below).
         return cls(h=opt.newton(f, x0=81e3-16e3*np.log10(p)))
 
-
     @classmethod
     def from_density(cls, rho):
         """Return a new instance for given density value(s)"""
-        method = getattr(cls, 'from_')
-        return method('density', rho)
-
+        return cls.__from_('density', rho)
 
     @classmethod
     def from_pressure(cls, p):
         """Return a new instance for given pressure value(s)"""
-        method = getattr(cls, 'from_')
-        return method('pressure', p)
-
+        return cls.__from_('pressure', p)
 
     def __str__(self):
         return f'{self.__class__.__qualname__}({self.h!r})'
