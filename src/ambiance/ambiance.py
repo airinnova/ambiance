@@ -266,7 +266,7 @@ class Atmosphere:
         if (v < v_min - _EPS).any() or (v > v_max + _EPS).any():
             raise ValueError(
                 "Value out of bounds." +
-                f" Lower limit: {v_min:.1f} {unit}" +
+                f" Lower limit: {v_min:.1f} {unit}." +
                 f" Upper limit: {v_max:.1f} {unit}."
             )
 
