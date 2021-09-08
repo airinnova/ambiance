@@ -273,7 +273,7 @@ class Atmosphere:
         def f(ht):
             # * Use log() for faster convergence in Newton method
             # * Allow Newton method to 'overshoot', do not check bounds
-            return np.log10(v/cls(ht, check_bounds=False).__getattribute__(variable))
+            return np.log10(v / getattr(cls(ht, check_bounds=False), variable))
 
         return cls(h=opt.newton(f, x0=x0_getter(v)))
 
