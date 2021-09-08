@@ -377,6 +377,57 @@ def test_subclassing():
     assert np.testing.assert_allclose(comp, exp) is None
 
 
+def test_from_density():
+    """Test instantiation of Atmosphere with 'from_pressure()' method"""
+
+    value_errors = [
+        -15.6,
+        (),
+        [[]],
+        [1, [2, 3]],
+        [1e5, 0],
+        CONST.rho_min*0.9,
+        CONST.rho_max*1.1,
+        ]
+
+    for value_error in value_errors:
+        with pytest.raises(ValueError):
+            Atmosphere.from_density(value_error)
+
+    # --- Scalar input ---
+    for h_exp in np.arange(CONST.h_min, CONST.h_max, 30.):
+        rho = Atmosphere(h_exp).density
+        h_comp = Atmosphere.from_density(rho).h
+        assert h_exp == approx(h_comp)
+
+    # Test boundaries
+    for h_exp in [CONST.h_min, CONST.h_max]:
+        rho = Atmosphere(h_exp).density
+        h_comp = Atmosphere.from_pressure(rho).h
+        assert h_exp == approx(h_comp)
+
+    # --- Vector input ---
+    h_exp = [0, -2000, 1e3, 30e3, -50, 71938]
+    rho = Atmosphere(h_exp).density
+    h_comp = Atmosphere.from_pressure(rho).h
+    assert np.testing.assert_allclose(h_exp, h_comp, atol=1e-9) is None
+
+    # Whole density range can be passed in
+    rho = np.linspace(CONST.rho_min, CONST.rho_max, 1000)
+    atmos = Atmosphere.from_pressure(rho)
+    assert np.testing.assert_allclose(rho, atmos.density) is None
+
+    # --- Matrix input ---
+    h_exp = np.array([
+        [0, -2000, 1e3],
+        [30e3, -50, 71938],
+        [888, 444, 9999.33],
+    ])
+    rho = Atmosphere(h_exp).density
+    h_comp = Atmosphere.from_density(rho).h
+    assert np.testing.assert_allclose(h_exp, h_comp, atol=1e-9) is None
+
+
 def test_from_pressure():
     """Test instantiation of Atmosphere with 'from_pressure()' method"""
 
