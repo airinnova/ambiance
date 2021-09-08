@@ -264,6 +264,13 @@ class Atmosphere:
 
 
     @classmethod
+    def from_density(cls, rho):
+        """Return a new instance for given density value(s)"""
+        method = getattr(cls, 'from_')
+        return method('density', rho)
+
+
+    @classmethod
     def from_pressure(cls, p):
         """Return a new instance for given pressure value(s)"""
         method = getattr(cls, 'from_')
