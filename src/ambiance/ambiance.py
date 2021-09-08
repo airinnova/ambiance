@@ -87,6 +87,8 @@ class CONST:
         :h_max: Upper boundary of acceptable geometric heights [m]
         :H_min: Lower boundary of acceptable geopotential heights [m]
         :H_max: Upper boundary of acceptable geopotential heights [m]
+        :rho_min: Lower boundary of acceptable densities [kg * m^-3]
+        :rho_max: Upper boundary of acceptable densities [kg * m^-3]
         :p_min: Lower boundary of acceptable pressures [Pa]
         :p_max: Upper boundary of acceptable pressures [Pa]
 
@@ -132,6 +134,10 @@ class CONST:
     # Geopotential heights
     H_min = -5_000
     H_max = 80_000
+
+    # Density limits (computed)
+    rho_min = 1.56994946e-5
+    rho_max = 1.93179069
 
     # Pressure limits (computed)
     p_min = 0.886216717024069
