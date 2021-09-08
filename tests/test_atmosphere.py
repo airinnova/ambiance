@@ -378,7 +378,7 @@ def test_subclassing():
 
 
 def test_from_density():
-    """Test instantiation of Atmosphere with 'from_pressure()' method"""
+    """Test instantiation of Atmosphere with 'from_density()' method"""
 
     value_errors = [
         -15.6,
