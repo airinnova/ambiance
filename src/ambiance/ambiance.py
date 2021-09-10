@@ -87,6 +87,8 @@ class CONST:
         :h_max: Upper boundary of acceptable geometric heights [m]
         :H_min: Lower boundary of acceptable geopotential heights [m]
         :H_max: Upper boundary of acceptable geopotential heights [m]
+        :rho_min: Lower boundary of acceptable densities [kg * m^-3]
+        :rho_max: Upper boundary of acceptable densities [kg * m^-3]
         :p_min: Lower boundary of acceptable pressures [Pa]
         :p_max: Upper boundary of acceptable pressures [Pa]
 
@@ -132,6 +134,10 @@ class CONST:
     # Geopotential heights
     H_min = -5_000
     H_max = 80_000
+
+    # Density limits (computed)
+    rho_min = 1.569949463833277e-5
+    rho_max = 1.9317906916235779
 
     # Pressure limits (computed)
     p_min = 0.886216717024069
@@ -240,7 +246,7 @@ class Atmosphere:
         """Return a new instance for given pressure value(s)"""
 
         p = cls._make_tensor(p)
-        if (p < CONST.p_min-_EPS).any() or (p > CONST.p_max+_EPS).any():
+        if (p < CONST.p_min - _EPS).any() or (p > CONST.p_max + _EPS).any():
             raise ValueError(
                 "Value out of bounds." +
                 f" Lower limit: {CONST.p_min:.1f} Pa." +
@@ -250,12 +256,29 @@ class Atmosphere:
         def f(ht):
             # * Use log() for faster convergence in Newton method
             # * Allow Newton method to 'overshoot', do not check bounds
-            return np.log10(p/cls(ht, check_bounds=False).pressure)
+            return np.log10(p / cls(ht, check_bounds=False).pressure)
 
         # Initial guess is based on noting that log10(pressure) vs. height is
         # approximately a straight line. Height can be roughly estimated from
         # h/1[m] = 80e3 - 16e3*log10(p/1[Pa]) (tweaked slightly below).
-        return cls(h=opt.newton(f, x0=81e3-16e3*np.log10(p)))
+        return cls(h=opt.newton(f, x0=81e3 - 16e3 * np.log10(p)))
+
+    @classmethod
+    def from_density(cls, rho):
+        """Return a new instance for given density value(s)"""
+
+        rho = cls._make_tensor(rho)
+        if (rho < CONST.rho_min - _EPS).any() or (rho > CONST.rho_max + _EPS).any():
+            raise ValueError(
+                "Value out of bounds." +
+                f" Lower limit: {CONST.rho_min:.2e} kg / m^3." +
+                f" Upper limit: {CONST.rho_max:.2f} kg / m^3."
+            )
+
+        def f(ht):
+            return np.log10(rho / cls(ht, check_bounds=False).density)
+
+        return cls(h=opt.newton(f, x0=2.33e3 - 16.3e3 * np.log10(rho)))
 
     def __str__(self):
         return f'{self.__class__.__qualname__}({self.h!r})'
