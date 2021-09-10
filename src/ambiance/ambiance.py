@@ -242,50 +242,43 @@ class Atmosphere:
         self._layer_nums = self._get_layer_nums()
 
     @classmethod
-    def __from_(cls, variable: str, value: float):
-        v = cls._make_tensor(value)
-        # Set up constants used dependent on the evaluated variable string
-        if variable == 'pressure':
-            unit = 'Pa'
-            shorthand = 'p'
-            # Initial guess is based on noting that log10(pressure) vs. height is
-            # approximately a straight line. Height can be roughly estimated from
-            # h/1[m] = 80e3 - 16e3*log10(p/1[Pa]) (tweaked slightly below).
-            x0_getter = lambda p: 81e3 - 16e3 * np.log10(p)
-        elif variable == 'density':
-            unit = 'kg * m^-3'
-            shorthand = 'rho'
-            # Initial guess is based on noting that log10(density) vs. height is
-            # approximately a straight line. Height can be roughly estimated from
-            # h/1[m] = 2.33e3 - 16.3e3*log10(rho/1[kg * m^-3]).
-            x0_getter = lambda rho: 2.33e3 - 16.3e3 * np.log10(rho)
-        else:
-            raise ValueError(f"Variable {variable} unkown.")
-        v_min = getattr(CONST, shorthand + '_min')
-        v_max = getattr(CONST, shorthand + '_max')
-        if (v < v_min - _EPS).any() or (v > v_max + _EPS).any():
+    def from_pressure(cls, p):
+        """Return a new instance for given pressure value(s)"""
+
+        p = cls._make_tensor(p)
+        if (p < CONST.p_min - _EPS).any() or (p > CONST.p_max + _EPS).any():
             raise ValueError(
                 "Value out of bounds." +
-                f" Lower limit: {v_min:.1f} {unit}." +
-                f" Upper limit: {v_max:.1f} {unit}."
+                f" Lower limit: {CONST.p_min:.1f} Pa." +
+                f" Upper limit: {CONST.p_max:.1f} Pa."
             )
 
         def f(ht):
             # * Use log() for faster convergence in Newton method
             # * Allow Newton method to 'overshoot', do not check bounds
-            return np.log10(v / getattr(cls(ht, check_bounds=False), variable))
+            return np.log10(p / cls(ht, check_bounds=False).pressure)
 
-        return cls(h=opt.newton(f, x0=x0_getter(v)))
+        # Initial guess is based on noting that log10(pressure) vs. height is
+        # approximately a straight line. Height can be roughly estimated from
+        # h/1[m] = 80e3 - 16e3*log10(p/1[Pa]) (tweaked slightly below).
+        return cls(h=opt.newton(f, x0=81e3 - 16e3 * np.log10(p)))
 
     @classmethod
     def from_density(cls, rho):
         """Return a new instance for given density value(s)"""
-        return cls.__from_('density', rho)
 
-    @classmethod
-    def from_pressure(cls, p):
-        """Return a new instance for given pressure value(s)"""
-        return cls.__from_('pressure', p)
+        rho = cls._make_tensor(rho)
+        if (rho < CONST.rho_min - _EPS).any() or (rho > CONST.rho_max + _EPS).any():
+            raise ValueError(
+                "Value out of bounds." +
+                f" Lower limit: {CONST.rho_min:.2e} kg / m^3." +
+                f" Upper limit: {CONST.rho_max:.2f} kg / m^3."
+            )
+
+        def f(ht):
+            return np.log10(rho / cls(ht, check_bounds=False).density)
+
+        return cls(h=opt.newton(f, x0=2.33e3 - 16.3e3 * np.log10(rho)))
 
     def __str__(self):
         return f'{self.__class__.__qualname__}({self.h!r})'
