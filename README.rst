@@ -29,11 +29,10 @@
 * `International Standard Atmosphere (Wikipedia) <https://en.wikipedia.org/wiki/International_Standard_Atmosphere>`_
 * International Civil Aviation Organization ; Manual Of The ICAO Standard Atmosphere -- 3rd Edition 1993 (Doc 7488) -- extended to 80 kilometres (262 500 feet)
 
-
 Usage
 =====
 
-Atmospheric properties are computed from an "Atmosphere object" which takes the altitude (geometric height) as input. For instance, to simply retrieve sea level properties, you can write:
+Atmospheric properties are computed from an ``Atmosphere`` object which takes the altitude (geometric height) as input. For instance, to simply retrieve sea level properties, you can write:
 
 .. code:: python
 
@@ -123,7 +122,22 @@ Similarly, you can also pass in entire *matrices*. Example:
     >>> Atmosphere([30000, 0]).layer_name
     array(['stratosphere', 'troposphere'], dtype='<U42')
 
-For all functionality see the `complete documentation <https://ambiance.readthedocs.io/en/latest/>`_.
+**Instantiating from given pressure or density**
+
+An ``Atmosphere`` object can also be instantiated from given ambient pressure or density.
+
+.. code:: python
+
+    >>> Atmosphere.from_pressure([80e3, 20e3])  # 80 kPa and 20 kPa
+    Atmosphere(array([ 1949.58557497, 11805.91571135]))
+
+    >>> Atmosphere.from_pressure([80e3, 20e3]).pressure
+    array([80000., 20000.])
+
+    >>> Atmosphere.from_density(1.0)  # 1.0 kg/m^3
+    Atmosphere(array([2064.96635895]))
+
+For a comprehensive and more detailed user guide, see the `complete documentation <https://ambiance.readthedocs.io/en/latest/>`_.
 
 Installation
 ============

@@ -124,10 +124,10 @@ The height data passed to ``Atmosphere`` can be a single value (integer, float),
     array([[9.79740029, 9.76972952],
            [9.80665   , 9.81591282]])
 
-Instantiating from given pressure
----------------------------------
+Instantiating from given pressure or density
+--------------------------------------------
 
-An ``Atmosphere`` object can also be instantiated from given ambient pressure. To do so you can use the ``Atmosphere.from_pressure()`` method. This method takes pressure values in :math:`Pa = N/m^2` as input. Scalar, vector- and matrix-like input is accepted. ``Atmosphere.from_pressure()`` returns a new atmosphere instance which lets you easily check other atmospheric properties too, like temperature.
+An ``Atmosphere`` object can also be instantiated from given ambient pressure or density. To do so you can use the ``Atmosphere.from_pressure()`` or ``Atmosphere.from_density()`` method, respectively. These methods take pressure or density values (in :math:`Pa = N/m^2` or :math:`kg/m^3`) as input. Scalar, vector- and matrix-like inputs are accepted. ``from_pressure()`` and ``from_density()`` return a new atmosphere instance which lets you easily check other atmospheric properties, like temperature.
 
 .. code:: python
 
@@ -147,7 +147,7 @@ An ``Atmosphere`` object can also be instantiated from given ambient pressure. T
     >>> atmos.h.round(2)
     array([  110.89, 16220.99, 31207.06, 48182.52, 65617.31, 80304.41])
 
-``Atmosphere.from_pressure()`` uses SciPy's `Newton method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.newton.html>`_ to find approximate atmospheric altitudes. The method uses the default tolerance settings from ``scipy.optimize.newton()`` when determining the altitude. The initial guess for the altitude is zero for all pressure values.
+``Atmosphere.from_density()`` can be used analogously. Both ``from_pressure()`` and ``from_density()`` use SciPy's `Newton method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.newton.html>`_ to find approximate atmospheric altitudes. The methods use the default tolerance settings from ``scipy.optimize.newton()`` when determining the altitude. The initial guess for the altitude is zero for all pressure values.
 
 Converting units
 ----------------

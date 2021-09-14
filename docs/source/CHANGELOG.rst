@@ -3,8 +3,13 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
-[1.2.1] -- 2021-03-03 (unpublished)
+[1.3.0] -- 2021-09-10
 ---------------------
+
+Added
+~~~~~
+
+* Added a ``from_pressure()`` method as suggested in https://github.com/airinnova/ambiance/issues/5
 
 Changed
 ~~~~~~~
