@@ -76,6 +76,7 @@ rst_prolog = f"""
 .. |author1| replace:: Aaron Dettmann
 .. |license| replace:: *Apache-2.0*
 .. _PyPI: https://pypi.org/project/ambiance/
+.. _Conda: https://anaconda.org/conda-forge/ambiance
 .. _pip: https://pypi.org/project/pip/
 .. _NumPy: https://pypi.org/project/numpy/
 .. _SciPy: https://pypi.org/project/scipy/

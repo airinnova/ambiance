@@ -3,8 +3,6 @@
 
 # Author: Aaron Dettmann
 
-# --> Should check geopotential rather geometric
-
 # ===== LAYER CHANGES =====
 # OK --> -5.0e3
 # *OK -2500

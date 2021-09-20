@@ -10,8 +10,8 @@
     :target: https://github.com/airinnova/ambiance/blob/master/LICENSE.txt
     :alt: License
 
-.. image:: https://travis-ci.org/airinnova/ambiance.svg?branch=master
-    :target: https://travis-ci.org/airinnova/ambiance
+.. image:: https://app.travis-ci.com/airinnova/ambiance.svg?branch=master
+    :target: https://app.travis-ci.com/airinnova/ambiance
     :alt: Build status
 
 .. image:: https://codecov.io/gh/airinnova/ambiance/branch/master/graph/badge.svg
@@ -29,8 +29,8 @@
 * `International Standard Atmosphere (Wikipedia) <https://en.wikipedia.org/wiki/International_Standard_Atmosphere>`_
 * International Civil Aviation Organization ; Manual Of The ICAO Standard Atmosphere -- 3rd Edition 1993 (Doc 7488) -- extended to 80 kilometres (262 500 feet)
 
-Usage
-=====
+Basic usage
+===========
 
 Atmospheric properties are computed from an ``Atmosphere`` object which takes the altitude (geometric height) as input. For instance, to simply retrieve sea level properties, you can write:
 
@@ -48,7 +48,8 @@ Atmospheric properties are computed from an ``Atmosphere`` object which takes th
     >>> sealevel.kinematic_viscosity
     array([1.46071857e-05])
 
-**List of available atmospheric properties**
+List of available atmospheric properties
+----------------------------------------
 
 * Collision frequency (``collision_frequency``)
 * Density (``density``)
@@ -68,7 +69,8 @@ Atmospheric properties are computed from an ``Atmosphere`` object which takes th
 * Temperature (``temperature``, ``temperature_in_celsius``)
 * Thermal conductivity (``thermal_conductivity``)
 
-**List-like input**
+Vector and matrix inputs
+------------------------
 
 *Ambiance* also handles list-like input (list, tuples, *Numpy* arrays). The following code demonstrates how to produce a temperature plot with *Matplotlib*. In the example, *Numpy*'s `linspace()` function is used to produce an array with altitudes.
 
@@ -78,7 +80,7 @@ Atmospheric properties are computed from an ``Atmosphere`` object which takes th
     import matplotlib.pyplot as plt
     from ambiance import Atmosphere
 
-    # Make an atmosphere object
+    # Create an atmosphere object
     heights = np.linspace(-5e3, 80e3, num=1000)
     atmosphere = Atmosphere(heights)
 
@@ -93,8 +95,6 @@ The output is
 
 .. image:: https://raw.githubusercontent.com/airinnova/ambiance/master/tests/plots/temperature.png
    :alt: Temperature plot
-
-**Matrix-like input**
 
 Similarly, you can also pass in entire *matrices*. Example:
 
@@ -122,9 +122,10 @@ Similarly, you can also pass in entire *matrices*. Example:
     >>> Atmosphere([30000, 0]).layer_name
     array(['stratosphere', 'troposphere'], dtype='<U42')
 
-**Instantiating from given pressure or density**
+Instantiating from given pressure or density
+--------------------------------------------
 
-An ``Atmosphere`` object can also be instantiated from given ambient pressure or density.
+In some contexts it may be convenient to instantiate an ``Atmosphere`` object from a given ambient pressure or density. This can be easily achieved by using the ``Atmosphere.from_pressure()`` or ``Atmosphere.from_density()`` methods, respectively. Both methods return ``Atmosphere`` objects from which all other properties, like temperature, can be requested.
 
 .. code:: python
 
@@ -137,16 +138,43 @@ An ``Atmosphere`` object can also be instantiated from given ambient pressure or
     >>> Atmosphere.from_density(1.0)  # 1.0 kg/m^3
     Atmosphere(array([2064.96635895]))
 
-For a comprehensive and more detailed user guide, see the `complete documentation <https://ambiance.readthedocs.io/en/latest/>`_.
+Complete user guide
+-------------------
+
+For a comprehensive and detailed user guide, please see the `complete documentation <https://ambiance.readthedocs.io/en/latest/>`_.
 
 Installation
 ============
+
+Pip (recommended)
+-----------------
 
 *Ambiance* is available on `PyPI <https://pypi.org/project/ambiance/>`_ and may simply be installed with
 
 .. code::
 
     pip install ambiance
+
+Conda
+-----
+
+The package can be installed via the `Conda <https://anaconda.org/conda-forge/ambiance>`_ environment with
+
+.. code::
+
+    conda install -c conda-forge ambiance
+
+.. image:: https://img.shields.io/badge/recipe-ambiance-green.svg
+    :target: https://anaconda.org/conda-forge/ambiance
+    :alt: Conda Recipe
+
+.. image:: https://img.shields.io/conda/dn/conda-forge/ambiance.svg
+    :target: https://anaconda.org/conda-forge/ambiance
+    :alt: Conda Downloads
+
+.. image:: https://img.shields.io/conda/vn/conda-forge/ambiance.svg
+    :target: https://anaconda.org/conda-forge/ambiance
+    :alt: Conda Version
 
 Requirements
 ============

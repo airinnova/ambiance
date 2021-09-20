@@ -267,6 +267,8 @@ class Atmosphere:
     def from_density(cls, rho):
         """Return a new instance for given density value(s)"""
 
+        # Analogous to 'from_pressure()'
+
         rho = cls._make_tensor(rho)
         if (rho < CONST.rho_min - _EPS).any() or (rho > CONST.rho_max + _EPS).any():
             raise ValueError(

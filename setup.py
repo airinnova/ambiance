@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import setuptools
-import os
 from pathlib import Path
 
 here = Path(__file__).parent.resolve()

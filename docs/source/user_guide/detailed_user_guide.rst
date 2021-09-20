@@ -31,7 +31,7 @@ Creating an Atmosphere object
         >>> atmosphere.H  # Geopotential height
         array([   0.        ,  999.84271205, 9984.29343877])
 
-    The ``Atmosphere`` class does only take *geometric* heights as input as this is the typical use. However, if you really wanted to request properties based on the *geopotential* height, you can convert the geopotential height to geometric height, and then call `Atmosphere`.
+    The ``Atmosphere`` class does only take *geometric* heights as input as this is the typical use case. However, if you really wanted to request properties based on the *geopotential* height, you can convert the geopotential heights to geometric heights, and then call `Atmosphere`.
 
     .. code:: python
 
@@ -47,7 +47,7 @@ Creating an Atmosphere object
 Computing atmospheric properties
 --------------------------------
 
-``Atmosphere`` provides attributes with atmospheric properties of interest. For instance, *pressure*, *gravitational acceleration* and *speed of sound* can be retrieved with:
+``Atmosphere`` provides a number attributes with atmospheric properties of interest. For instance, *pressure*, *gravitational acceleration* and *speed of sound* can be retrieved with:
 
 .. code:: python
 
@@ -127,7 +127,7 @@ The height data passed to ``Atmosphere`` can be a single value (integer, float),
 Instantiating from given pressure or density
 --------------------------------------------
 
-An ``Atmosphere`` object can also be instantiated from given ambient pressure or density. To do so you can use the ``Atmosphere.from_pressure()`` or ``Atmosphere.from_density()`` method, respectively. These methods take pressure or density values (in :math:`Pa = N/m^2` or :math:`kg/m^3`) as input. Scalar, vector- and matrix-like inputs are accepted. ``from_pressure()`` and ``from_density()`` return a new atmosphere instance which lets you easily check other atmospheric properties, like temperature.
+In some contexts it may be convenient to instantiate an ``Atmosphere`` object from a given ambient pressure or density. This can be easily achieved by using the ``Atmosphere.from_pressure()`` or ``Atmosphere.from_density()`` methods, respectively. Both methods return ``Atmosphere`` objects from which all other properties, like temperature, can be requested. ``from_pressure()`` and ``from_density()``  assume that pressure and density values are given in :math:`Pa = N/m^2` and :math:`kg/m^3`. Scalar, vector- and matrix-like inputs are accepted.
 
 .. code:: python
 
@@ -147,12 +147,12 @@ An ``Atmosphere`` object can also be instantiated from given ambient pressure or
     >>> atmos.h.round(2)
     array([  110.89, 16220.99, 31207.06, 48182.52, 65617.31, 80304.41])
 
-``Atmosphere.from_density()`` can be used analogously. Both ``from_pressure()`` and ``from_density()`` use SciPy's `Newton method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.newton.html>`_ to find approximate atmospheric altitudes. The methods use the default tolerance settings from ``scipy.optimize.newton()`` when determining the altitude. The initial guess for the altitude is zero for all pressure values.
+``Atmosphere.from_density()`` can be used analogously. Both ``from_pressure()`` and ``from_density()`` use SciPy's `Newton method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.newton.html>`_ to find approximate atmospheric altitudes. The methods use the default tolerance settings from ``scipy.optimize.newton()`` when determining the altitude.
 
 Converting units
 ----------------
 
-|name| also provides functions to convert between different units.
+|name| also provides a few convenience functions to convert between different units.
 
 Kelvin and degree Celsius
 ~~~~~~~~~~~~~~~~~~~~~~~~~

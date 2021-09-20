@@ -6,7 +6,7 @@ Welcome to |name|'s documentation!
    :alt: Logo
    :align: right
 
-|name_bold| is a full implementation of the ICAO standard atmosphere 1993 written in Python. |name| allows you to create an 'Atmosphere object' from which atmospheric properties can be easily derived in a human-readable form.
+|name_bold| is a full implementation of the ICAO standard atmosphere 1993 written in Python. |name| allows you to create an ``Atmosphere`` object from which atmospheric properties can be easily derived in a human-readable form.
 
 .. code:: python
 

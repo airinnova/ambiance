@@ -4,7 +4,7 @@ Exending the model
 Adding new functions
 --------------------
 
-The atmosphere class can be easily extended with custom atmospheric properties. The easiest way to do this, is to subclass from ``Atmosphere``, and to add custom methods to your new, extended atmosphere object (here ``MyExtendedAtmosphere``).
+The atmosphere class can be easily extended with custom atmospheric properties. The easiest way to do this, is to subclass from ``Atmosphere``, and to add custom methods to your new, extended atmosphere object (below called ``MyExtendedAtmosphere``).
 
 .. code:: python
 
