@@ -3,6 +3,14 @@ Changelog
 
 Changelog for |name_bold|. Version numbers try to follow `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[1.3.1] -- 2022-09-25
+---------------------
+
+Added
+~~~~~
+
+* Added support for Numpy data types, see https://github.com/airinnova/ambiance/issues/10
+
 [1.3.0] -- 2021-09-10
 ---------------------
 

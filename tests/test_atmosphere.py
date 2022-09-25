@@ -72,6 +72,20 @@ def test_invalid_inputs():
             Atmosphere(invalid_input)
 
 
+def test_special_data_types():
+    """
+    Check that Atmosphere can be instantianted from special Numpy datatypes
+
+    See issue https://github.com/airinnova/ambiance/issues/10
+    """
+
+    atmos = Atmosphere(np.int16(1000))
+    assert atmos.temperature == approx(281.651, 1e-5)
+
+    atmos = Atmosphere(np.float32(1000))
+    assert atmos.temperature == approx(281.651, 1e-5)
+
+
 def test_set_height_after_instantiating():
     """Do not allow to set heights (h, H) after instantiating"""
 

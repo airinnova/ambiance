@@ -4,7 +4,7 @@
 # ======================================================================
 # AMBIANCE -- A full implementation of the ICAO standard atmosphere 1993
 #
-#  Copyright 2019-2020 Aaron Dettmann
+#  Copyright 2019-2022 Aaron Dettmann
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -230,7 +230,7 @@ class Atmosphere:
     def __init__(self, h, check_bounds=True):
         """Return a new instance from given geometric height(s)"""
 
-        self._h = self._make_tensor(h)
+        self._h = _make_tensor(h)
         if check_bounds and ((self.h < CONST.h_min-_EPS).any() or (self.h > CONST.h_max+_EPS).any()):
             raise ValueError(
                 "Value out of bounds." +
@@ -245,7 +245,7 @@ class Atmosphere:
     def from_pressure(cls, p):
         """Return a new instance for given pressure value(s)"""
 
-        p = cls._make_tensor(p)
+        p = _make_tensor(p)
         if (p < CONST.p_min - _EPS).any() or (p > CONST.p_max + _EPS).any():
             raise ValueError(
                 "Value out of bounds." +
@@ -269,7 +269,7 @@ class Atmosphere:
 
         # Analogous to 'from_pressure()'
 
-        rho = cls._make_tensor(rho)
+        rho = _make_tensor(rho)
         if (rho < CONST.rho_min - _EPS).any() or (rho > CONST.rho_max + _EPS).any():
             raise ValueError(
                 "Value out of bounds." +
@@ -307,31 +307,13 @@ class Atmosphere:
         return self._layer_nums
 
     @staticmethod
-    def _make_tensor(t):
-        """Return a 'tensor object' from given user input"""
-
-        # Number-like or array-like input is accepted
-        if isinstance(t, (int, float, list, tuple)):
-            t = np.asarray(t, dtype=float)
-            if t.ndim == 0:
-                t = t[None]  # Make 1D array
-        elif not isinstance(t, np.ndarray):
-            raise TypeError("Input data type not accepted")
-
-        if t.size == 0:
-            raise ValueError("Input array is empty")
-
-        # Always work with float
-        return t.astype(dtype=float)
-
-    @staticmethod
     def geom2geop_height(h):
         """
         Convert geometric height :math:`h` to geopotential height :math:`H`
 
         :math:`H = \\frac{r h}{r + h}`
         """
-        h = __class__._make_tensor(h)
+        h = _make_tensor(h)
         return CONST.r*h/(CONST.r + h)
 
     @staticmethod
@@ -341,7 +323,7 @@ class Atmosphere:
 
         :math:`h = \\frac{r H}{r - H}`
         """
-        H = __class__._make_tensor(H)
+        H = _make_tensor(H)
         return CONST.r*H/(CONST.r - H)
 
     @staticmethod
@@ -351,7 +333,7 @@ class Atmosphere:
 
         :math:`T = t + T_i`
         """
-        return CONST.T_i + __class__._make_tensor(t)
+        return CONST.T_i + _make_tensor(t)
 
     @staticmethod
     def T2t(T):
@@ -360,7 +342,7 @@ class Atmosphere:
 
         :math:`t = T - T_i`
         """
-        return __class__._make_tensor(T) - CONST.T_i
+        return _make_tensor(T) - CONST.T_i
 
     def _get_layer_nums(self):
         """Return array of same shape as 'self.H' with corresponding layer numbers"""
@@ -523,3 +505,35 @@ class Atmosphere:
         """Thermal conductivity :math:`\\lambda`"""
         T = self.temperature
         return 2.648151e-3*T**1.5/(T + (245.4*10**(-12/T)))
+
+
+def _is_numpy_dtype(t):
+    """
+    Return true if argument is a Numpy data type
+
+    Example:
+
+        np.int16(42) --> True
+        float(4.2)   --> False
+    """
+
+    # Is there a better way to check for numpy data types?
+    return type(t).__module__ == 'numpy' and hasattr(t, 'dtype')
+
+
+def _make_tensor(t):
+    """Return a 'tensor object' from given user input"""
+
+    # Number-like or array-like input is accepted
+    if isinstance(t, (int, float, list, tuple, np.ndarray)) or _is_numpy_dtype(t):
+        # Always work with float
+        t = np.asarray(t, dtype=float)
+        if t.ndim == 0:
+            t = t[None]  # Make 1D array
+    else:
+        raise TypeError("Input data type not accepted")
+
+    if t.size == 0:
+        raise ValueError("Input array is empty")
+
+    return t
