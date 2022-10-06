@@ -513,8 +513,10 @@ def _is_numpy_dtype(t):
 
     Example:
 
-        np.int16(42) --> True
-        float(4.2)   --> False
+    >>> _is_numpy_dtype(np.int16(42))
+    True
+    >>> _is_numpy_dtype(float(4.2))
+    False
     """
 
     # Is there a better way to check for numpy data types?

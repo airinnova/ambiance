@@ -104,6 +104,11 @@ vars_const = (
         name='Nominal Earth\'s radius',
         unit='m',
     ),
+    V(
+        symb='\\beta',
+        name='Temperature gradient (layer-specific)',
+        unit='K/m',
+    ),
 )
 
 
@@ -170,7 +175,7 @@ props = (
         symb='p',
         eq=(
           'p = p_b \\exp \\left[ - \\frac{g_0}{R T} (H - H_b) \\right] \\quad \\text{for} \\quad \\beta = 0',
-          'p = p_b \\left[ 1 + \\frac{\\beta}{T_b} (H - H_b) \\right]^{-g_0 \\beta / R} \\quad \\text{for} \\quad \\beta \\neq 0',
+          'p = p_b \\left[ 1 + \\frac{\\beta}{T_b} (H - H_b) \\right]^{-g_0/(\\beta R)} \\quad \\text{for} \\quad \\beta \\neq 0',
         ),
     ),
     P(

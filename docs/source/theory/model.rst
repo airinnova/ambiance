@@ -20,6 +20,7 @@ Constants
 * :math:`\rho_0`: Sea level atmospheric density [kg/m³]
 * :math:`\sigma`: Effective collision diameter of an air molecule [m]
 * :math:`r`: Nominal Earth's radius [m]
+* :math:`\beta`: Temperature gradient (layer-specific) [K/m]
 
 Variables
 ---------
@@ -135,7 +136,7 @@ Pressure
 
 :math:`p = p_b \exp \left[ - \frac{g_0}{R T} (H - H_b) \right] \quad \text{for} \quad \beta = 0`
 
-:math:`p = p_b \left[ 1 + \frac{\beta}{T_b} (H - H_b) \right]^{-g_0 \beta / R} \quad \text{for} \quad \beta \neq 0`
+:math:`p = p_b \left[ 1 + \frac{\beta}{T_b} (H - H_b) \right]^{-g_0/(\beta R)} \quad \text{for} \quad \beta \neq 0`
 
 Pressure scale height
 ~~~~~~~~~~~~~~~~~~~~~
